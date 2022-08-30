@@ -1,8 +1,6 @@
 package controller
 
 import (
-	"net/http"
-
 	"example.com/m/v2/services"
 	"github.com/gin-gonic/gin"
 )
@@ -18,11 +16,18 @@ func NewAnswerController(answerService *services.AnswerServiceImpl) *AnswerContr
 }
 
 func (uc *AnswerController) getAnswer(ctx *gin.Context) {
-	var Answerid string = ctx.Param("Answerid")
-	user, err := uc.answerService.getAnswer(Answerid)
-	if err != nil {
-		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
-		return
-	}
-	ctx.JSON(http.StatusOK, user)
+	// var Answerid string = ctx.Param("Answerid")
+	// user, err := uc.answerService.getAnswer(Answerid)
+	// if err != nil {
+	// 	ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
+	// 	return
+	// }
+	// ctx.JSON(http.StatusOK, user)
 }
+func (uc *AnswerController) postAnswer(ctx *gin.Context) {}
+
+func (uc *AnswerController) deleteAnswer(ctx *gin.Context) {}
+
+func (uc *AnswerController) createAnswer(ctx *gin.Context) {}
+
+func (uc *AnswerController) update(ctx *gin.Context) {}

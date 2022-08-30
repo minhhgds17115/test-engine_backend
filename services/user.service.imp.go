@@ -72,7 +72,7 @@ func (u *UserServiceImpl) UpdateUser(user *models.Users) error {
 }
 
 func (u *UserServiceImpl) DeleteUser(firstname *string) error {
-	filter := bson.D{primitive.E{Key: "name", Value: firstname}}
+	filter := bson.D{primitive.E{Key: "First name", Value: firstname}}
 	result, _ := u.usercollection.DeleteOne(u.ctx, filter)
 	if result.DeletedCount != 1 {
 		return errors.New("no matched user found for delete")
