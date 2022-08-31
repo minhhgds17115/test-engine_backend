@@ -17,9 +17,18 @@ import (
 var (
 	server      *gin.Engine
 	us          *services.UserServiceImpl
+	as          *services.AnswerServiceImpl
+	qs          *services.QuestionServiceImpl
+	ts          *services.TestServiceImpl
 	uc          *controller.UserController
+	qc          *controller.QuestionController
+	ac          *controller.AnswerController
+	tc          *controller.TestController
 	ctx         context.Context
 	userc       *mongo.Collection
+	questionc   *mongo.Collection
+	answerc     *mongo.Collection
+	testc       *mongo.Collection
 	mongoclient *mongo.Client
 	err         error
 )
@@ -39,9 +48,18 @@ func init() {
 
 	fmt.Println("mongo connection established")
 
-	userc = mongoclient.Database("Users").Collection("Users")
+	userc = mongoclient.Database("test-engine").Collection("test")
+	questionc = mongoclient.Database("test-engine").Collection("test")
+	answerc = mongoclient.Database("test-engine").Collection("test")
+	testc = mongoclient.Database("test-engine").Collection("test")
 	us = services.NewUserService(userc, ctx)
+	as = services.NewAnswerServices(answerc, ctx)
+	qs = services.NewQuestionServices(questionc, ctx)
+	ts = services.NewTestService(testc, ctx)
 	uc = controller.NewController(us)
+	qc = controller.NewQuestionController(qs)
+	ac = controller.NewAnswerController(as)
+	tc = controller.NewTestController(ts)
 	server = gin.Default()
 }
 
@@ -50,6 +68,9 @@ func main() {
 
 	basepath := server.Group("/v1/")
 	uc.RegisterRouterGroup(basepath)
+	qc.RegisterQuestionRouterGroup(basepath)
+	ac.RegisterAnswerRouterGroup(basepath)
+	tc.RegisterTestRouterGroup(basepath)
 
 	log.Fatal(server.Run(":9000"))
 

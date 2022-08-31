@@ -13,13 +13,20 @@ type Answer struct {
 }
 
 type Question struct {
-	QuestionID  int      `json:"question_id"`
-	Answer      Answer   `json:"answer"`
-	MultiChoice bool     `json:"multi_choice"`
+	QuestionID  int      `json:"id"`
+	Answer      []Answer `json:"answers"`
+	MultiChoice bool     `json:"multichoice"`
 	Topic       string   `json:"topic"`
 	Information string   `json:"information"`
-	Timeouts    int      `json:"timeouts"`
+	Timeouts    int      `json:"timeout"`
 	Question    string   `json:"question"`
-	UserId      int      `json:"user_id"`
-	History     []string `json:"history"`
+}
+
+type Test struct {
+	TestID    int        `json:"test_id"`
+	Name      string     `json:"name"`
+	Question  []Question `json:"questions"`
+	Randomize bool       `json:"randomize"`
+	Company   string     `json:"company"`
+	Timeouts  int        `json:"timeout"`
 }

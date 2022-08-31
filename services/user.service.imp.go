@@ -3,6 +3,7 @@ package services
 import (
 	"context"
 	"errors"
+	"fmt"
 
 	"example.com/m/v2/models"
 	"go.mongodb.org/mongo-driver/bson"
@@ -23,7 +24,9 @@ func NewUserService(usercollection *mongo.Collection, ctx context.Context) *User
 }
 
 func (u *UserServiceImpl) CreateUser(user *models.Users) error {
-	_, err := u.usercollection.InsertOne(u.ctx, user)
+	fmt.Println("user collection created", u.usercollection.Name(), u.usercollection.Database().Name())
+
+	_, err := u.usercollection.InsertOne(u.ctx, *user)
 	return err
 }
 
@@ -72,7 +75,7 @@ func (u *UserServiceImpl) UpdateUser(user *models.Users) error {
 }
 
 func (u *UserServiceImpl) DeleteUser(firstname *string) error {
-	filter := bson.D{primitive.E{Key: "First name", Value: firstname}}
+	filter := bson.D{primitive.E{Key: "FirstName", Value: firstname}}
 	result, _ := u.usercollection.DeleteOne(u.ctx, filter)
 	if result.DeletedCount != 1 {
 		return errors.New("no matched user found for delete")

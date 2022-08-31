@@ -19,9 +19,9 @@ func NewQuestionController(questionService *services.QuestionServiceImpl) *Quest
 	}
 }
 
-func (uc *QuestionController) GetQuestion(ctx *gin.Context) {
+func (qc *QuestionController) GetQuestion(ctx *gin.Context) {
 	var QuestionID string = ctx.Param("QuestionID")
-	user, err := uc.questionService.GetQuestion(QuestionID)
+	user, err := qc.questionService.GetQuestion(QuestionID)
 	if err != nil {
 		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
 		return
@@ -29,36 +29,37 @@ func (uc *QuestionController) GetQuestion(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, user)
 }
 
-func (uc *QuestionController) CreateQuestion(ctx *gin.Context) {
+func (qc *QuestionController) CreateQuestion(ctx *gin.Context) {
 	var Question models.Question
 	if err := ctx.ShouldBindJSON(&Question); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 		return
 	}
-	err := uc.questionService.CreateQuestion(&Question)
+	err := qc.questionService.CreateQuestion(&Question)
 	if err != nil {
 		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
 		return
 	}
+
 	ctx.JSON(http.StatusOK, gin.H{"message": "success"})
 }
 
-func (uc *QuestionController) UpdateQuestion(ctx *gin.Context) {
+func (qc *QuestionController) UpdateQuestion(ctx *gin.Context) {
 	var Question models.Question
 	if err := ctx.ShouldBindJSON(&Question); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 		return
 	}
-	err := uc.questionService.UpdateQuestion(&Question)
+	err := qc.questionService.UpdateQuestion(&Question)
 	if err != nil {
 		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
 		return
 	}
 	ctx.JSON(http.StatusOK, gin.H{"message": "success"})
 }
-func (uc *QuestionController) DeleteQuestion(ctx *gin.Context) {
-	var Question string = ctx.Param("Question")
-	err := uc.questionService.DeleteQuestion(Question)
+func (qc *QuestionController) DeleteQuestion(ctx *gin.Context) {
+	var QuestionID string = ctx.Param("QuestionID")
+	err := qc.questionService.DeleteQuestion(QuestionID)
 	if err != nil {
 		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
 		return
@@ -66,6 +67,16 @@ func (uc *QuestionController) DeleteQuestion(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{"message": "success"})
 }
 
-func (uc *QuestionController) multi_choice(ctx *gin.Context) {
+// not implemented
+// func (qc *QuestionController) multi_choice(ctx *gin.Context) {
 
+// }
+
+func (qc *QuestionController) RegisterQuestionRouterGroup(rg *gin.RouterGroup) {
+	questionrouter := rg.Group("/question")
+	questionrouter.GET("/GetQuestion/:id", qc.GetQuestion)
+	questionrouter.POST("/CreateQuestion", qc.CreateQuestion)
+	questionrouter.PATCH("/UpdateQuestion", qc.UpdateQuestion)
+	questionrouter.DELETE("/DeleteQuestion", qc.DeleteQuestion)
+	// questionrouter.GET("/multi_choice", qc.multi_choice)
 }
