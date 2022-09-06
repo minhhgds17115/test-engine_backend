@@ -6,4 +6,7 @@ type TestService interface {
 	GetAllTest([]models.Test, error)
 	CreateTest(models.Test) error
 	GetTestID(models.Test) error
+	UpdateTest(models.Test) error
+	DeleteTest(models.Test) error
+	StoreAnswer(models.Test) error
 }

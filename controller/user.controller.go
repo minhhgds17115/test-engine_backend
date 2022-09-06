@@ -78,7 +78,7 @@ func (uc *UserController) UpdateUser(ctx *gin.Context) {
 }
 
 func (uc *UserController) DeleteUser(ctx *gin.Context) {
-	var FirstName string = ctx.Param("first_name")
+	var FirstName string = ctx.Param("id")
 	err := uc.userService.DeleteUser(&FirstName)
 	if err != nil {
 		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
@@ -90,9 +90,9 @@ func (uc *UserController) DeleteUser(ctx *gin.Context) {
 func (uc *UserController) RegisterRouterGroup(rg *gin.RouterGroup) {
 	userroute := rg.Group("/users")
 	userroute.GET("/GetUserEmail/:email", uc.GetUserEmail)
-	userroute.POST("/CreateUser/:id", uc.CreateUser)
+	userroute.POST("/CreateUser", uc.CreateUser)
 	userroute.PATCH("/update", uc.UpdateUser)
-	userroute.DELETE("/delete/:FirstName", uc.DeleteUser)
+	userroute.DELETE("/delete/:id", uc.DeleteUser)
 	userroute.GET("/GetAllUsers", uc.GetAllUsers)
 
 }

@@ -75,15 +75,35 @@ func (t *TestServiceImpl) GetAllTest() ([]*models.Test, error) {
 
 func (t *TestServiceImpl) GetTestID(TestID *int) (*models.Test, error) {
 	var testId *models.Test
-	query := bson.D{bson.E{Key: "testId", Value: testId}}
+	fmt.Println(*TestID)
+	query := bson.D{bson.E{Key: "global.test_id", Value: *TestID}}
 	err := t.testCollection.FindOne(t.ctx, query).Decode(&testId)
 	return testId, err
 
 }
 
+func (t *TestServiceImpl) StoreAnswer(Answer *models.Answer) error {
+	
+	// timestamp := time.Now().String()
+	// test := bson.D{bson.E{Key: "id", Value: Answer.AnswerId}}
+
+
+	_, err := t.testCollection.InsertOne(t.ctx, Answer)
+
+	return err
+}
+
 func (t *TestServiceImpl) UpdateTest(Test *models.Test) error {
 	filter := bson.D{primitive.E{Key: "id", Value: Test.Global.TestID}}
-	update := bson.D{primitive.E{Key: "$set", Value: bson.D{primitive.E{Key: "timeout", Value: Test.Global.Timeout}, primitive.E{Key: "multichoice", Value: Test.Questions[0].Multichoice}, primitive.E{Key: "topic", Value: Test.Questions[0].Topic}}}}
+	multichoice := make([]bool, 0)
+	for _, question := range Test.Questions {
+		multichoice = append(multichoice, question.Multichoice)
+	}
+	topic := make([]string, 0)
+	for _, question := range Test.Questions {
+		topic = append(topic, question.Topic)
+	}
+	update := bson.D{primitive.E{Key: "$set", Value: bson.D{primitive.E{Key: "timeout", Value: Test.Global.Timeout}, primitive.E{Key: "multichoice", Value: multichoice}, primitive.E{Key: "topic", Value: topic}}}}
 	result, _ := t.testCollection.UpdateOne(t.ctx, filter, update)
 	if result.MatchedCount != 1 {
 		return errors.New("no matched document found for update")

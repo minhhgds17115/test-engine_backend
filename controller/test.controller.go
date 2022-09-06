@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"example.com/m/v2/models"
 	"example.com/m/v2/services"
 	"github.com/gin-gonic/gin"
 )
@@ -28,7 +29,7 @@ func (tc *TestController) GetAllTest(ctx *gin.Context) {
 }
 
 func (tc *TestController) GetTestID(ctx *gin.Context) {
-	testId, _ := strconv.Atoi(ctx.Param("test_id"))
+	testId, _ := strconv.Atoi(ctx.Param("id"))
 	user, err := tc.testService.GetTestID(&testId)
 	if err != nil {
 		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
@@ -37,9 +38,23 @@ func (tc *TestController) GetTestID(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, user)
 }
 
+func (tc *TestController) UpdateTest(ctx *gin.Context) {
+	var test models.Test
+	if err := ctx.ShouldBindJSON(&test); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
+		return
+	}
+	err := tc.testService.UpdateTest(&test)
+	if err != nil {
+		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
+		return
+	}
+	ctx.JSON(http.StatusOK, gin.H{"message": "success"})
+}
+
 func (tc *TestController) RegisterTestRouterGroup(rg *gin.RouterGroup) {
 	testroute := rg.Group("/test")
-
+	testroute.PATCH("/UpdateTest", tc.UpdateTest)
 	testroute.GET("/getAllTest", tc.GetAllTest)
 	testroute.GET("/GetTestID/:id", tc.GetTestID)
 }

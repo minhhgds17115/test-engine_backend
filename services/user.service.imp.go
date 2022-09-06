@@ -4,10 +4,13 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"strconv"
 
 	"example.com/m/v2/models"
+	"github.com/google/uuid"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
@@ -25,7 +28,9 @@ func NewUserService(usercollection *mongo.Collection, ctx context.Context) *User
 
 func (u *UserServiceImpl) CreateUser(user *models.Users) error {
 	fmt.Println("user collection created", u.usercollection.Name(), u.usercollection.Database().Name())
-
+	id := uuid.New()
+	user.ID = int(id.ID())
+	fmt.Println(*user)
 	_, err := u.usercollection.InsertOne(u.ctx, *user)
 	return err
 }
@@ -74,8 +79,11 @@ func (u *UserServiceImpl) UpdateUser(user *models.Users) error {
 	return nil
 }
 
-func (u *UserServiceImpl) DeleteUser(firstname *string) error {
-	filter := bson.D{primitive.E{Key: "FirstName", Value: firstname}}
+func (u *UserServiceImpl) DeleteUser(id *string) error {
+	idNumber, _ := strconv.Atoi(*id)
+	filter := bson.D{primitive.E{Key: "id", Value: idNumber}}
+
+	fmt.Println(*id)
 	result, _ := u.usercollection.DeleteOne(u.ctx, filter)
 	if result.DeletedCount != 1 {
 		return errors.New("no matched user found for delete")
