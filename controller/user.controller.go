@@ -54,8 +54,8 @@ func (uc *UserController) GetUserEmail(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, user)
 }
 
-func (uc *UserController) GetAll(ctx *gin.Context) {
-	users, err := uc.userService.GetAll()
+func (uc *UserController) GetAllUsers(ctx *gin.Context) {
+	users, err := uc.userService.GetAllUsers()
 	if err != nil {
 		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
 		return
@@ -93,6 +93,6 @@ func (uc *UserController) RegisterRouterGroup(rg *gin.RouterGroup) {
 	userroute.POST("/CreateUser/:id", uc.CreateUser)
 	userroute.PATCH("/update", uc.UpdateUser)
 	userroute.DELETE("/delete/:FirstName", uc.DeleteUser)
-	userroute.GET("/all", uc.GetAll)
+	userroute.GET("/GetAllUsers", uc.GetAllUsers)
 
 }

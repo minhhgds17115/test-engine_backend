@@ -2,10 +2,10 @@ package services
 
 import "example.com/m/v2/models"
 
-type userService interface {
+type UserService interface {
 	CreateUser(models.Users) error
-	getUser(models.Users) (models.Users, error)
-	getAllUsers() ([]models.Users, error)
+	GetUserEmail(models.Users) (models.Users, error)
+	GetAllUsers() ([]models.Users, error)
 	updateUser(models.Users) error
 	deleteUser(models.Users) error
 }

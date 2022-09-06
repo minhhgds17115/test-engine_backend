@@ -33,22 +33,15 @@ func (ac *AnswerController) GetAnswer(ctx *gin.Context) {
 	}
 	ctx.JSON(http.StatusOK, user)
 }
-func (uc *AnswerController) PostAnswer(ctx *gin.Context) {
-
-}
 
 func (ac *AnswerController) DeleteAnswer(ctx *gin.Context) {
-	// Answer, err := strconv.Atoi(ctx.Param("Answer"))
-	//  if err != nil {
-	// 	ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
-	// 	return
-	// }
-	// err := ac.answerService.DeleteAnswer(&Answer)
-	// if err != nil {
-	// 	ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
-	// 	return
-	// }
-	// ctx.JSON(http.StatusOK, gin.H{"message": "success"})
+	var Answer models.Answer
+	err := ac.answerService.DeleteAnswer(&Answer)
+	if err != nil {
+		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
+		return
+	}
+	ctx.JSON(http.StatusOK, gin.H{"message": "success"})
 }
 
 func (ac *AnswerController) CreateAnswer(ctx *gin.Context) {
@@ -79,10 +72,21 @@ func (ac *AnswerController) UpdateAnswer(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{"message": "success"})
 }
 
+func (ac *AnswerController) PostAnswer(ctx *gin.Context) {
+	var Answer models.Answer
+	if err := ctx.ShouldBindJSON(&Answer); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
+
+		return
+	}
+	ctx.JSON(http.StatusOK, gin.H{"message": "answer Recoreded"})
+}
+
 func (ac *AnswerController) RegisterAnswerRouterGroup(rg *gin.RouterGroup) {
 	answerrouter := rg.Group("/answer")
 	answerrouter.GET("/GetAnswer/:id", ac.GetAnswer)
 	answerrouter.POST("/CreateAnswer", ac.CreateAnswer)
 	answerrouter.PATCH("/UpdateAnswer", ac.UpdateAnswer)
 	answerrouter.DELETE("/DeleteAnswer", ac.DeleteAnswer)
+	answerrouter.POST("/PostAnswer", ac.PostAnswer)
 }

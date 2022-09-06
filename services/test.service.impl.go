@@ -7,6 +7,7 @@ import (
 
 	"example.com/m/v2/models"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
@@ -78,6 +79,16 @@ func (t *TestServiceImpl) GetTestID(TestID *int) (*models.Test, error) {
 	err := t.testCollection.FindOne(t.ctx, query).Decode(&testId)
 	return testId, err
 
+}
+
+func (t *TestServiceImpl) UpdateTest(Test *models.Test) error {
+	filter := bson.D{primitive.E{Key: "id", Value: Test.Global.TestID}}
+	update := bson.D{primitive.E{Key: "$set", Value: bson.D{primitive.E{Key: "timeout", Value: Test.Global.Timeout}, primitive.E{Key: "multichoice", Value: Test.Questions[0].Multichoice}, primitive.E{Key: "topic", Value: Test.Questions[0].Topic}}}}
+	result, _ := t.testCollection.UpdateOne(t.ctx, filter, update)
+	if result.MatchedCount != 1 {
+		return errors.New("no matched document found for update")
+	}
+	return nil
 }
 
 func (t *TestServiceImpl) CreateTest(test *mongo.Collection) error {

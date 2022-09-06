@@ -18,10 +18,10 @@ var (
 	server      *gin.Engine
 	us          *services.UserServiceImpl
 	as          *services.AnswerServiceImpl
-	qs          *services.QuestionServiceImpl
+	qs          *services.QuestionsServiceImpl
 	ts          *services.TestServiceImpl
 	uc          *controller.UserController
-	qc          *controller.QuestionController
+	qc          *controller.QuestionsController
 	ac          *controller.AnswerController
 	tc          *controller.TestController
 	ctx         context.Context
@@ -54,10 +54,10 @@ func init() {
 	testc = mongoclient.Database("test-engine").Collection("test")
 	us = services.NewUserService(userc, ctx)
 	as = services.NewAnswerServices(answerc, ctx)
-	qs = services.NewQuestionServices(questionc, ctx)
+	qs = services.NewQuestionsServices(questionc, ctx)
 	ts = services.NewTestService(testc, ctx)
 	uc = controller.NewController(us)
-	qc = controller.NewQuestionController(qs)
+	qc = controller.NewQuestionsController(qs)
 	ac = controller.NewAnswerController(as)
 	tc = controller.NewTestController(ts)
 	server = gin.Default()
@@ -68,7 +68,7 @@ func main() {
 
 	basepath := server.Group("/v1/")
 	uc.RegisterRouterGroup(basepath)
-	qc.RegisterQuestionRouterGroup(basepath)
+	qc.RegisterQuestionsRouterGroup(basepath)
 	ac.RegisterAnswerRouterGroup(basepath)
 	tc.RegisterTestRouterGroup(basepath)
 

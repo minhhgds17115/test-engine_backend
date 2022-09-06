@@ -9,19 +9,19 @@ import (
 	"example.com/m/v2/services"
 )
 
-type QuestionController struct {
-	questionService *services.QuestionServiceImpl
+type QuestionsController struct {
+	QuestionsService *services.QuestionsServiceImpl
 }
 
-func NewQuestionController(questionService *services.QuestionServiceImpl) *QuestionController {
-	return &QuestionController{
-		questionService: questionService,
+func NewQuestionsController(QuestionsService *services.QuestionsServiceImpl) *QuestionsController {
+	return &QuestionsController{
+		QuestionsService: QuestionsService,
 	}
 }
 
-func (qc *QuestionController) GetQuestion(ctx *gin.Context) {
-	var QuestionID string = ctx.Param("QuestionID")
-	user, err := qc.questionService.GetQuestion(QuestionID)
+func (qc *QuestionsController) GetQuestions(ctx *gin.Context) {
+	var QuestionsID string = ctx.Param("QuestionsID")
+	user, err := qc.QuestionsService.GetQuestions(QuestionsID)
 	if err != nil {
 		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
 		return
@@ -29,13 +29,13 @@ func (qc *QuestionController) GetQuestion(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, user)
 }
 
-func (qc *QuestionController) CreateQuestion(ctx *gin.Context) {
-	var Question models.Question
-	if err := ctx.ShouldBindJSON(&Question); err != nil {
+func (qc *QuestionsController) CreateQuestions(ctx *gin.Context) {
+	var Questions models.Questions
+	if err := ctx.ShouldBindJSON(&Questions); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 		return
 	}
-	err := qc.questionService.CreateQuestion(&Question)
+	err := qc.QuestionsService.CreateQuestions(&Questions)
 	if err != nil {
 		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
 		return
@@ -44,22 +44,22 @@ func (qc *QuestionController) CreateQuestion(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{"message": "success"})
 }
 
-func (qc *QuestionController) UpdateQuestion(ctx *gin.Context) {
-	var Question models.Question
-	if err := ctx.ShouldBindJSON(&Question); err != nil {
+func (qc *QuestionsController) UpdateQuestions(ctx *gin.Context) {
+	var Questions models.Questions
+	if err := ctx.ShouldBindJSON(&Questions); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 		return
 	}
-	err := qc.questionService.UpdateQuestion(&Question)
+	err := qc.QuestionsService.UpdateQuestions(&Questions)
 	if err != nil {
 		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
 		return
 	}
 	ctx.JSON(http.StatusOK, gin.H{"message": "success"})
 }
-func (qc *QuestionController) DeleteQuestion(ctx *gin.Context) {
-	var QuestionID string = ctx.Param("QuestionID")
-	err := qc.questionService.DeleteQuestion(QuestionID)
+func (qc *QuestionsController) DeleteQuestions(ctx *gin.Context) {
+	var QuestionsID string = ctx.Param("id")
+	err := qc.QuestionsService.DeleteQuestions(QuestionsID)
 	if err != nil {
 		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
 		return
@@ -68,15 +68,15 @@ func (qc *QuestionController) DeleteQuestion(ctx *gin.Context) {
 }
 
 // not implemented
-// func (qc *QuestionController) multi_choice(ctx *gin.Context) {
+// func (qc *QuestionsController) multi_choice(ctx *gin.Context) {
 
 // }
 
-func (qc *QuestionController) RegisterQuestionRouterGroup(rg *gin.RouterGroup) {
-	questionrouter := rg.Group("/question")
-	questionrouter.GET("/GetQuestion/:id", qc.GetQuestion)
-	questionrouter.POST("/CreateQuestion", qc.CreateQuestion)
-	questionrouter.PATCH("/UpdateQuestion", qc.UpdateQuestion)
-	questionrouter.DELETE("/DeleteQuestion", qc.DeleteQuestion)
-	// questionrouter.GET("/multi_choice", qc.multi_choice)
+func (qc *QuestionsController) RegisterQuestionsRouterGroup(rg *gin.RouterGroup) {
+	Questionsrouter := rg.Group("/Questions")
+	Questionsrouter.GET("/GetQuestions/:id", qc.GetQuestions)
+	Questionsrouter.POST("/CreateQuestions", qc.CreateQuestions)
+	Questionsrouter.PATCH("/UpdateQuestions", qc.UpdateQuestions)
+	Questionsrouter.DELETE("/DeleteQuestions/:id", qc.DeleteQuestions)
+	// Questionsrouter.GET("/multi_choice", qc.multi_choice)
 }

@@ -3,6 +3,7 @@ package services
 import (
 	"context"
 	"errors"
+	"fmt"
 
 	"example.com/m/v2/models"
 	"go.mongodb.org/mongo-driver/bson"
@@ -53,6 +54,8 @@ func (u *AnswerServiceImpl) GetAnswer(Answerid int) (*models.Answer, error) {
 	return answerid, err
 }
 
-func (u *AnswerServiceImpl) postAnswer(Answer *models.Answer) error {
-	return nil
+func (u *AnswerServiceImpl) PostAnswer(Answer *models.Answer) error {
+	fmt.Println("user answerd recoreded ", u.answerColllection.Name(), u.answerColllection.Database().Name())
+	_, err := u.answerColllection.InsertOne(u.ctx, *Answer)
+	return err
 }

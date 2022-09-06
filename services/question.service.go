@@ -2,12 +2,12 @@ package services
 
 import "example.com/m/v2/models"
 
-type questionService interface {
-	CreateQuestion(models.Question) error
-	GetQuestion(models.Question) (models.Question, error)
-	getAllQuestion() ([]models.Question, error)
-	updateQuestion(models.Question) error
-	deleteQuestion(models.Question) error
-	multi_choice(models.Question) error
-	GetTopics(models.Question)
+type QuestionsService interface {
+	CreateQuestions(models.Questions) error
+	GetQuestions(models.Questions) (models.Questions, error)
+	getAllQuestions() ([]models.Questions, error)
+	updateQuestions(models.Questions) error
+	deleteQuestions(models.Questions) error
+	multi_choice(models.Questions) error
+	GetTopics(models.Questions)
 }

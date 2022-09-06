@@ -37,7 +37,7 @@ func (u *UserServiceImpl) GetUserEmail(email *string) (*models.Users, error) {
 	return user, err
 }
 
-func (u *UserServiceImpl) GetAll() ([]*models.Users, error) {
+func (u *UserServiceImpl) GetAllUsers() ([]*models.Users, error) {
 	var users []*models.Users
 	cursor, err := u.usercollection.Find(u.ctx, bson.D{{}})
 	if err != nil {
