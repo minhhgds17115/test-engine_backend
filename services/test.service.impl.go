@@ -68,7 +68,7 @@ func (t *TestServiceImpl) GetAllTest() ([]*models.Test, error) {
 	fmt.Println("tests ", tests)
 
 	if len(tests) == 0 {
-		return nil, errors.New("Test not found")
+		return nil, errors.New("test not found")
 	}
 	return tests, nil
 }
@@ -83,10 +83,9 @@ func (t *TestServiceImpl) GetTestID(TestID *int) (*models.Test, error) {
 }
 
 func (t *TestServiceImpl) StoreAnswer(Answer *models.Answer) error {
-	
+
 	// timestamp := time.Now().String()
 	// test := bson.D{bson.E{Key: "id", Value: Answer.AnswerId}}
-
 
 	_, err := t.testCollection.InsertOne(t.ctx, Answer)
 
@@ -112,6 +111,7 @@ func (t *TestServiceImpl) UpdateTest(Test *models.Test) error {
 }
 
 func (t *TestServiceImpl) CreateTest(test *mongo.Collection) error {
+
 	_, err := t.testCollection.InsertOne(t.ctx, test)
 	return err
 }

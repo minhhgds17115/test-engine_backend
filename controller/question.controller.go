@@ -74,9 +74,10 @@ func (qc *QuestionsController) DeleteQuestions(ctx *gin.Context) {
 
 func (qc *QuestionsController) RegisterQuestionsRouterGroup(rg *gin.RouterGroup) {
 	Questionsrouter := rg.Group("/Questions")
-	Questionsrouter.GET("/GetQuestions/:id", qc.GetQuestions)
-	Questionsrouter.POST("/CreateQuestions", qc.CreateQuestions)
-	Questionsrouter.PATCH("/UpdateQuestions", qc.UpdateQuestions)
-	Questionsrouter.DELETE("/DeleteQuestions/:id", qc.DeleteQuestions)
-	// Questionsrouter.GET("/multi_choice", qc.multi_choice)
+	// Questionsrouter.GET("",qc.GetAllQuestions)
+	Questionsrouter.GET("/:id", qc.GetQuestions)
+	Questionsrouter.POST("/", qc.CreateQuestions)
+	Questionsrouter.PATCH("/:id", qc.UpdateQuestions)
+	Questionsrouter.DELETE("/:id", qc.DeleteQuestions)
+
 }

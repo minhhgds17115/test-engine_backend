@@ -4,13 +4,14 @@ import (
 	"context"
 	"errors"
 	"fmt"
+
 	"strconv"
 
 	"example.com/m/v2/models"
+	
 	"github.com/google/uuid"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
-
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
@@ -25,6 +26,8 @@ func NewUserService(usercollection *mongo.Collection, ctx context.Context) *User
 		ctx:            ctx,
 	}
 }
+
+
 
 func (u *UserServiceImpl) CreateUser(user *models.Users) error {
 	fmt.Println("user collection created", u.usercollection.Name(), u.usercollection.Database().Name())

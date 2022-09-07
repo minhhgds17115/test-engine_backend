@@ -89,10 +89,10 @@ func (uc *UserController) DeleteUser(ctx *gin.Context) {
 
 func (uc *UserController) RegisterRouterGroup(rg *gin.RouterGroup) {
 	userroute := rg.Group("/users")
-	userroute.GET("/GetUserEmail/:email", uc.GetUserEmail)
-	userroute.POST("/CreateUser", uc.CreateUser)
-	userroute.PATCH("/update", uc.UpdateUser)
-	userroute.DELETE("/delete/:id", uc.DeleteUser)
-	userroute.GET("/GetAllUsers", uc.GetAllUsers)
+	userroute.GET("/:email", uc.GetUserEmail)
+	userroute.POST("", uc.CreateUser)
+	userroute.PATCH("/:id", uc.UpdateUser)
+	userroute.DELETE("/:id", uc.DeleteUser)
+	userroute.GET("/", uc.GetAllUsers)
 
 }

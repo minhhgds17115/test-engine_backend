@@ -6,6 +6,7 @@ import (
 	"strconv"
 
 	"example.com/m/v2/models"
+	"github.com/google/uuid"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -24,6 +25,8 @@ func NewQuestionsServices(QuestionsCollection *mongo.Collection, ctx context.Con
 }
 
 func (u *QuestionsServiceImpl) CreateQuestions(Questions *models.Questions) error {
+	id := uuid.New()
+	Questions.ID = int(id.ID())
 	_, err := u.QuestionsCollection.InsertOne(u.ctx, Questions)
 	return err
 }

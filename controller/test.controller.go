@@ -54,7 +54,7 @@ func (tc *TestController) UpdateTest(ctx *gin.Context) {
 
 func (tc *TestController) RegisterTestRouterGroup(rg *gin.RouterGroup) {
 	testroute := rg.Group("/test")
-	testroute.PATCH("/UpdateTest", tc.UpdateTest)
-	testroute.GET("/getAllTest", tc.GetAllTest)
-	testroute.GET("/GetTestID/:id", tc.GetTestID)
+	testroute.PATCH(":id", tc.UpdateTest)
+	testroute.GET("/", tc.GetAllTest)
+	testroute.GET("/:id", tc.GetTestID)
 }
