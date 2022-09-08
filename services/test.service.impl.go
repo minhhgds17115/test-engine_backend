@@ -78,18 +78,8 @@ func (t *TestServiceImpl) GetTestID(TestID *int) (*models.Test, error) {
 	fmt.Println(*TestID)
 	query := bson.D{bson.E{Key: "global.test_id", Value: *TestID}}
 	err := t.testCollection.FindOne(t.ctx, query).Decode(&testId)
+
 	return testId, err
-
-}
-
-func (t *TestServiceImpl) StoreAnswer(Answer *models.Answer) error {
-
-	// timestamp := time.Now().String()
-	// test := bson.D{bson.E{Key: "id", Value: Answer.AnswerId}}
-
-	_, err := t.testCollection.InsertOne(t.ctx, Answer)
-
-	return err
 }
 
 func (t *TestServiceImpl) UpdateTest(Test *models.Test) error {
@@ -114,4 +104,14 @@ func (t *TestServiceImpl) CreateTest(test *mongo.Collection) error {
 
 	_, err := t.testCollection.InsertOne(t.ctx, test)
 	return err
+}
+
+func (t *TestServiceImpl) StoreAnswer(Results *mongo.Collection, Timestamp *models.UserAnswer, Clicks *models.UserAnswer) error {
+	results := []interface{}{Results, Timestamp, Clicks}
+	// timestamp := time.Now().Format("2006-01-02T15:04:05Z")
+	// results, err := t.testCollection.InsertMany(t.ctx, results)
+	if results != nil {
+		return nil
+	}
+	return nil
 }

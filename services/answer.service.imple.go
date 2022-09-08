@@ -24,6 +24,7 @@ func NewAnswerServices(answerColllection *mongo.Collection, ctx context.Context)
 }
 
 func (u *AnswerServiceImpl) CreateAnswer(Answer *models.Answer) error {
+
 	_, err := u.answerColllection.InsertOne(u.ctx, Answer)
 	return err
 }
@@ -46,6 +47,8 @@ func (u *AnswerServiceImpl) UpdateAnswer(Answer *models.Answer) error {
 	return nil
 
 }
+
+
 
 func (u *AnswerServiceImpl) GetAnswer(Answerid int) (*models.Answer, error) {
 	var answerid *models.Answer

@@ -52,9 +52,20 @@ func (tc *TestController) UpdateTest(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{"message": "success"})
 }
 
+func (tc *TestController) StoreAnswer(ctx *gin.Context) {
+	var results models.UserAnswer
+	if err := ctx.BindJSON(&results); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{"message": "success"})
+}
+
 func (tc *TestController) RegisterTestRouterGroup(rg *gin.RouterGroup) {
 	testroute := rg.Group("/test")
 	testroute.PATCH(":id", tc.UpdateTest)
 	testroute.GET("/", tc.GetAllTest)
 	testroute.GET("/:id", tc.GetTestID)
+	testroute.POST("/", tc.StoreAnswer)
 }

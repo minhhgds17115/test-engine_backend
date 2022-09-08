@@ -27,6 +27,7 @@ func NewQuestionsServices(QuestionsCollection *mongo.Collection, ctx context.Con
 func (u *QuestionsServiceImpl) CreateQuestions(Questions *models.Questions) error {
 	id := uuid.New()
 	Questions.ID = int(id.ID())
+	
 	_, err := u.QuestionsCollection.InsertOne(u.ctx, Questions)
 	return err
 }

@@ -1,10 +1,10 @@
 package models
 
 type Users struct {
-	ID        int    `json:"id"`
-	FirstName string `json:"first_name"`
-	LastName  string `json:"last_name"`
-	Email     string `json:"email" `
+	ID        int    `json:"id" omniempty:"id"`
+	FirstName string `json:"first_name" omniempty:"first_name"`
+	LastName  string `json:"last_name" `
+	Email     string `json:"email validate:email"`
 }
 
 type Answer struct {
