@@ -4,8 +4,10 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
 
 	"example.com/m/v2/models"
+	"github.com/google/uuid"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -100,18 +102,27 @@ func (t *TestServiceImpl) UpdateTest(Test *models.Test) error {
 	return nil
 }
 
-func (t *TestServiceImpl) CreateTest(test *mongo.Collection) error {
+func (t *TestServiceImpl) CreateTest(Test *mongo.Collection) error {
 
-	_, err := t.testCollection.InsertOne(t.ctx, test)
+	_, err := t.testCollection.InsertOne(t.ctx, Test)
 	return err
 }
 
-func (t *TestServiceImpl) StoreAnswer(Results *mongo.Collection, Timestamp *models.UserAnswer, Clicks *models.UserAnswer) error {
-	results := []interface{}{Results, Timestamp, Clicks}
-	// timestamp := time.Now().Format("2006-01-02T15:04:05Z")
-	// results, err := t.testCollection.InsertMany(t.ctx, results)
-	if results != nil {
-		return nil
-	}
-	return nil
+func (t *TestServiceImpl) StoreAnswer(Results *models.Results) error {
+	position := uuid.New()
+	Results.Position = int(position.ID())
+	_, err := t.testCollection.InsertOne(t.ctx, Results)
+
+	return err
+}
+
+func (t *TestServiceImpl) StoreHistory(History *models.History) error {
+	id := uuid.New()
+	History.ID = int(id.ID())
+	timestamp := time.Now()
+
+	_, err := t.testCollection.InsertOne(t.ctx, History)
+
+	fmt.Println(timestamp)
+	return err
 }

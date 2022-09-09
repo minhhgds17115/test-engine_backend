@@ -3,9 +3,9 @@ package services
 import (
 	"context"
 	"errors"
-	"fmt"
 
 	"example.com/m/v2/models"
+	"github.com/google/uuid"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -24,7 +24,8 @@ func NewAnswerServices(answerColllection *mongo.Collection, ctx context.Context)
 }
 
 func (u *AnswerServiceImpl) CreateAnswer(Answer *models.Answer) error {
-
+	id := uuid.New()
+	Answer.AnswerId = int(id.ID())
 	_, err := u.answerColllection.InsertOne(u.ctx, Answer)
 	return err
 }
@@ -48,8 +49,6 @@ func (u *AnswerServiceImpl) UpdateAnswer(Answer *models.Answer) error {
 
 }
 
-
-
 func (u *AnswerServiceImpl) GetAnswer(Answerid int) (*models.Answer, error) {
 	var answerid *models.Answer
 	query := bson.D{bson.E{Key: "id", Value: Answerid}}
@@ -57,8 +56,8 @@ func (u *AnswerServiceImpl) GetAnswer(Answerid int) (*models.Answer, error) {
 	return answerid, err
 }
 
-func (u *AnswerServiceImpl) PostAnswer(Answer *models.Answer) error {
-	fmt.Println("user answerd recoreded ", u.answerColllection.Name(), u.answerColllection.Database().Name())
-	_, err := u.answerColllection.InsertOne(u.ctx, *Answer)
-	return err
-}
+// func (u *AnswerServiceImpl) PostAnswer(Answer *models.Answer) error {
+// 	// fmt.Println("New answerd recoreded ", u.answerColllection.Name(), u.answerColllection.Database().Name())
+// 	// _, err := u.answerColllection.InsertOne(u.ctx, *Answer)
+// 	// return err
+// }

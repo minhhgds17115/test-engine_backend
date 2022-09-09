@@ -68,16 +68,18 @@ type UserAnswer struct {
 		Topic       string   `json:"topic"`
 		Answers     []string `json:"answers"`
 		Clicks      int      `json:"clicks"`
-		History     []struct {
-			ID        int   `json:"id"`
-			Pos       int   `json:"pos"`
-			Timestamp int64 `json:"timestamp"`
-		} `json:"history"`
-		Results []struct {
-			Answer   string `json:"answer"`
-			Position int    `json:"position"`
-			Result   bool   `json:"result"`
-		} `json:"results"`
-		Completed bool `json:"completed"`
+		Completed   bool     `json:"completed"`
 	} `json:"questions"`
+}
+
+type History struct {
+	ID        int   `json:"id"`
+	Pos       int   `json:"pos"`
+	Timestamp int64 `json:"timestamp"`
+}
+
+type Results struct {
+	Answer   string `json:"answer"`
+	Position int    `json:"position"`
+	Result   bool   `json:"result"`
 }

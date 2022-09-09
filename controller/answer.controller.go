@@ -72,16 +72,6 @@ func (ac *AnswerController) UpdateAnswer(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{"message": "success"})
 }
 
-// func (ac *AnswerController) PostAnswer(ctx *gin.Context) {
-// 	var Answer models.Answer
-// 	if err := ctx.ShouldBindJSON(&Answer); err != nil {
-// 		ctx.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
-
-// 		return
-// 	}
-// 	ctx.JSON(http.StatusOK, gin.H{"message": "answer Recoreded"})
-// }
-
 func (ac *AnswerController) RegisterAnswerRouterGroup(rg *gin.RouterGroup) {
 	answerrouter := rg.Group("/answer")
 	// answerrouter.GET("", ac.GetAllAnswer)
