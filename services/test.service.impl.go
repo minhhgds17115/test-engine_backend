@@ -4,10 +4,8 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"time"
 
 	"example.com/m/v2/models"
-	"github.com/google/uuid"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -108,21 +106,10 @@ func (t *TestServiceImpl) CreateTest(Test *mongo.Collection) error {
 	return err
 }
 
-func (t *TestServiceImpl) StoreAnswer(Results *models.Results) error {
-	position := uuid.New()
-	Results.Position = int(position.ID())
-	_, err := t.testCollection.InsertOne(t.ctx, Results)
+func (t *TestServiceImpl) StoreAnswer(UserAnswer *mongo.Collection) error {
 
-	return err
-}
-
-func (t *TestServiceImpl) StoreHistory(History *models.History) error {
-	id := uuid.New()
-	History.ID = int(id.ID())
-	timestamp := time.Now()
-
-	_, err := t.testCollection.InsertOne(t.ctx, History)
-
-	fmt.Println(timestamp)
+	var userAnswer *models.UserAnswer	
+	
+	_, err := t.testCollection.InsertOne(t.ctx, userAnswer)
 	return err
 }

@@ -1,5 +1,7 @@
 package models
 
+import "time"
+
 type Users struct {
 	ID        int    `json:"id" omniempty:"id"`
 	FirstName string `json:"first_name" omniempty:"first_name"`
@@ -70,16 +72,14 @@ type UserAnswer struct {
 		Clicks      int      `json:"clicks"`
 		Completed   bool     `json:"completed"`
 	} `json:"questions"`
-}
-
-type History struct {
-	ID        int   `json:"id"`
-	Pos       int   `json:"pos"`
-	Timestamp int64 `json:"timestamp"`
-}
-
-type Results struct {
-	Answer   string `json:"answer"`
-	Position int    `json:"position"`
-	Result   bool   `json:"result"`
+	History []struct {
+		HistoryID int       `json:"history_id"`
+		Pos       int       `json:"pos"`
+		Timestamp time.Time `json:" timestamp"`
+	} `json:"history"`
+	Results []struct {
+		Answer   string `json:"answer"`
+		Position int    `json:"position"`
+		Result   bool   `json:"result"`
+	} `json:"results"`
 }
