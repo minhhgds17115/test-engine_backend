@@ -62,24 +62,17 @@ type Stats struct {
 }
 
 type UserAnswer struct {
-	Questions []struct {
-		ID          int      `json:"id"`
-		Timeout     int      `json:"timeout"`
-		Question    string   `json:"question"`
-		Multichoice bool     `json:"multichoice"`
-		Topic       string   `json:"topic"`
-		Answers     []string `json:"answers"`
-		Clicks      int      `json:"clicks"`
-		Completed   bool     `json:"completed"`
-	} `json:"questions"`
-	History []struct {
-		HistoryID int       `json:"history_id"`
-		Pos       int       `json:"pos"`
-		Timestamp time.Time `json:" timestamp"`
-	} `json:"history"`
-	Results []struct {
-		Answer   string `json:"answer"`
-		Position int    `json:"position"`
-		Result   bool   `json:"result"`
+	Results struct {
+		ID        int       `json:"result_id"`
+		Answer    Answers   `json:"answer"`
+		Position  int       `json:"position"`
+		Result    bool      `json:"result"`
+		Questions Questions `json:"questions"`
+		Clicks    int       `json:"clicks"`
+		History   []struct {
+			HistoryID int       `json:"history_id"`
+			Pos       int       `json:"pos"`
+			Timestamp time.Time `json:" timestamp"`
+		} `json:"history"`
 	} `json:"results"`
 }
