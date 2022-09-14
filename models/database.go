@@ -42,7 +42,7 @@ type Users struct {
 	ID        int    `json:"id" omniempty:"id"`
 	FirstName string `json:"first_name" omniempty:"first_name"`
 	LastName  string `json:"last_name" `
-	Email     string `json:"email validate:email"`
+	Contact   string `json:"contact" omniempty:"contact"`
 }
 
 //// Returned answers
@@ -63,8 +63,8 @@ type ReturnedUserInformation struct {
 }
 
 type Stats struct {
-	TimeStart string `json:"time_start"`
-	TimeEnd   string `json:"time_end"`
+	TimeStart time.Time `json:"time_start" omniempty:"time_start"`
+	TimeEnd   time.Time `json:"time_end"`
 }
 
 type UserAnswer struct {
@@ -92,10 +92,10 @@ type Result struct {
 	Result   bool   `json:"result"`
 }
 
-// type Answer struct {
-// 	AnswerId int    `json:"answer_id"`
-// 	Answer   string `json:"answer"`
-// }
+type Answer struct {
+	AnswerId int    `json:"answer_id"`
+	Answer   string `json:"answer"`
+}
 
 // type Answers struct {
 // 	AnswerId  int    `json:"answer_id"`

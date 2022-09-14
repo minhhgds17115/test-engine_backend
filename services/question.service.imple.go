@@ -24,15 +24,15 @@ func NewQuestionsServices(QuestionsCollection *mongo.Collection, ctx context.Con
 	}
 }
 
-func (u *QuestionsServiceImpl) CreateQuestions(Questions *models.Questions) error {
+func (u *QuestionsServiceImpl) CreateQuestions(Questions *models.Question) error {
 	id := uuid.New()
 	Questions.ID = int(id.ID())
-	
+
 	_, err := u.QuestionsCollection.InsertOne(u.ctx, Questions)
 	return err
 }
 
-func (u *QuestionsServiceImpl) UpdateQuestions(Questions *models.Questions) error {
+func (u *QuestionsServiceImpl) UpdateQuestions(Questions *models.Question) error {
 	filter := bson.D{primitive.E{Key: "id", Value: Questions.ID}}
 	update := bson.D{primitive.E{Key: "$set", Value: bson.D{primitive.E{Key: "ID", Value: Questions.ID}, primitive.E{Key: "Information", Value: Questions.Information}, primitive.E{Key: "Topic", Value: Questions.Topic}, primitive.E{Key: "Timeouts", Value: Questions.Timeout}}}}
 	result, _ := u.QuestionsCollection.UpdateOne(u.ctx, filter, update)
@@ -52,8 +52,8 @@ func (u *QuestionsServiceImpl) DeleteQuestions(QuestionsId string) error {
 	return nil
 }
 
-func (u *QuestionsServiceImpl) GetQuestions(QuestionsId string) (*models.Questions, error) {
-	var QuestionsIDs *models.Questions
+func (u *QuestionsServiceImpl) GetQuestions(QuestionsId string) (*models.Question, error) {
+	var QuestionsIDs *models.Question
 	query := bson.D{bson.E{Key: "id", Value: QuestionsIDs}}
 	err := u.QuestionsCollection.FindOne(u.ctx, query).Decode(&QuestionsIDs)
 	return QuestionsIDs, err

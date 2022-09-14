@@ -114,27 +114,78 @@ func (t *TestServiceImpl) Clicks(test *mongo.Collection) error {
 	return nil
 }
 
-func (t *TestServiceImpl) StoreAnswer(Results *models.UserAnswer, History *models.UserAnswer) error {
-	var result models.UserAnswer
+func (t *TestServiceImpl) StoreAnswer(Results *models.UserAnswer, History *models.History, Result *models.Result, Stats *models.Stats) error {
+	var UserAnswer models.UserAnswer
+	var history models.History
+	// var stats models.Stats
+	var result models.Result
 
 	id := uuid.New()
-	result.Results.ID = int(id.ID())
+	UserAnswer.ID = int(id.ID())
+	history.HistoryID = int(id.ID())
+
 	StoreAnswer := []interface{}{
 		bson.D{
-			{Key: "id	", Value: result.Results.ID},
-			{Key: "answer	", Value: result.Results.Answer},
-			{Key: "position	", Value: result.Results.Position},
-			{Key: "result	", Value: result.Results.Result},
-			{Key: "question	", Value: result.Results.Questions},
-			{Key: " clicks", Value: result.Results.Clicks},
+			{Key: "id	", Value: UserAnswer.ID},
+			{Key: "timeout	", Value: UserAnswer.Timeout},
+			{Key: "question	", Value: UserAnswer.Question},
+			{Key: "position	", Value: UserAnswer.Multichoice},
+			{Key: "result	", Value: UserAnswer.Topic},
+			{Key: "answer", Value: UserAnswer.Answers},
+			{Key: " clicks", Value: UserAnswer.Clicks},
+			{Key: "timer", Value: UserAnswer.Histories},
+			{Key: "history	", Value: UserAnswer.Histories},
+			{Key: "results", Value: UserAnswer.Results},
+			{Key: "completed", Value: UserAnswer.Complete},
 		},
 		bson.D{
-			{Key: "history_id	", Value: result.Results.ID},
-			{Key: "pos", Value: result.Results.Position},
+			{Key: "time_start", Value: time.Now().Unix()},
+			{Key: "time_end", Value: time.Now().Unix()},
+		},
+		bson.D{
+			{Key: "id	", Value: history.HistoryID},
+			{Key: "pos", Value: history.Pos},
 			{Key: "timestamp", Value: time.Now().Unix()},
 		},
-	}
+		bson.D{
+			{Key: "answer", Value: result.Answer},
+			{Key: "position	", Value: result.Position},
+			{Key: "result	", Value: result.Result},
+		}}
+	////	timer
+	// timer := time.NewTimer(2 * time.Second)
 
+	// go func() {
+	// 	<-timer.C
+
+	// 	// Printed when timer is fired
+	// 	fmt.Println("timer inactivated")
+	// }()
+
+	// stopTimer := timer.Stop()
+
+	// if stopTimer {
+	// 	fmt.Println("Out of times")
+	// }
+	// time.Sleep(10 * time.Second)
+	// 	//clicks counter
+	// 	Clicks := time.NewTicker(1 * time.Second)
+	// 	done := make(chan bool)
+
+	// 	go func() {
+	// 		for {
+	// 			select {
+	// 			case <-done:
+	// 				return
+	// 			case t := <-timer.C:
+	// 				fmt.Println("Ticks at", t)
+	// 			}
+	// 		}
+	// 	}()
+	// 	time.Sleep(10 * time.Second)
+	// 	Clicks.Stop()
+	// 	done <- true
+	// 	Timer :=
 	_, err := t.testCollection.InsertMany(t.ctx, StoreAnswer)
 	return err
 }

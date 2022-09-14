@@ -53,15 +53,17 @@ func (tc *TestController) UpdateTest(ctx *gin.Context) {
 }
 
 func (tc *TestController) StoreAnswer(ctx *gin.Context) {
-	var results models.UserAnswer
-	var history models.UserAnswer
+	var UserAnswer models.UserAnswer
+	var history models.History
+	var result models.Result
+	var stats models.Stats
 
-	if err := ctx.ShouldBindJSON(&results); err != nil {
+	if err := ctx.ShouldBindJSON(&UserAnswer); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 		return
 	}
 
-	err := tc.testService.StoreAnswer(&results, &history)
+	err := tc.testService.StoreAnswer(&UserAnswer, &history, &result, &stats)
 	if err != nil {
 		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
 		return

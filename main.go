@@ -55,7 +55,7 @@ func init() {
 	us = services.NewUserService(userc, ctx)
 	as = services.NewAnswerServices(answerc, ctx)
 	qs = services.NewQuestionsServices(questionc, ctx)
-	ts = services.NewTestService(testc, ctx)
+	ts = services.NewTestService(testc, ctx)	
 	uc = controller.NewController(us)
 	qc = controller.NewQuestionsController(qs)
 	ac = controller.NewAnswerController(as)

@@ -1,0 +1,194 @@
+
+{ 
+	"gobal": {
+		"test_id": 1,
+		"name": "test name 1",
+		"company": "DISION",
+		"timeout": 300,		// timeout is seconds
+		"randomize": true, // true is default
+		"callback": [
+			"https://send.results.com/api/v1"
+		]
+	},
+	
+	"messages": {
+		"greeting": "Welcome to...",
+		"information": "This is a critical test...",
+		"thankyou": "Thank you for attending our test...",
+		"feedback": "Do you have any feedback for us"
+	}
+
+	"questions": [
+		{
+			"id": 0,
+			"topic": "Softskills",
+			"timeout": 30, // timeout is seconds
+			"question": "What is your name?",
+			"information": "Please note that...",
+			"multichoice": false,
+			"answers": [
+				"Florian",
+				"Sven"
+			]
+		},
+		{
+			"id": 1,
+			"topic": "Technical",
+			"timeout": 25, // timeout is seconds
+			"question": "Where do you went to school?",
+			"information": "Please note that...",
+			"multichoice": true,
+			"answers": [
+				"Ho Chi Minh",
+				"Nowhere"
+			]
+		}	
+	]
+}
+
+
+
+
+
+
+"https://send.results.com/api/v1/?id=1"
+
+
+{ 
+	"gobal": {
+		"test_id": 1,
+		"name": "test name 1",
+		"timeout": 300,		// timeout is seconds
+		"randomize": true,
+	},
+	
+	"candidate": {
+		"time_start": "Mo, 1961916", // UTC timestamp
+		"firstname": "Sven",
+		"lastname": "Gusek",
+		"contact": "sven.gusek@dision.tech"
+	}
+}
+
+
+
+"https://send.results.com/api/v1/?id=2"
+
+
+{ 
+	"gobal": {
+		"test_id": 1,
+		"name": "test name 1",
+		"timeout": 300,		// timeout is seconds
+		"randomize": true,
+	},
+	
+	"candidate": {
+		"time_start": "Mo, 1961916", // UTC timestamp
+		"firstname": "Sven",
+		"lastname": "Gusek",
+		"contact": "sven.gusek@dision.tech",
+		"send_feedback": true,
+		"feedback": "..."
+	},		
+	
+	"stats": {
+		"time_start": "Mo, 1961916", // UTC timestamp
+		"time_end": "Mo, 18953207" // UTC timestap
+	},
+
+	"questions": [
+		{
+			"id": 0,
+			"timeout": 30, // timeout is seconds
+			"question": "What is your name?",
+			"multichoice": false,
+			"topic": "Technical",			
+			"answers": [
+				"Florian",
+				"Sven"
+			]
+			"clicks": 3,
+			"history": [
+				{
+					"id": 0,
+					"pos": 0,
+					"timestamp": 4963409364 // utc timestamp
+				},
+				{
+					"id": 1,
+					"pos": 1,
+					"timestamp": 4963409364 // utc timestamp
+				},
+				{
+					"id": 2,
+					"pos": 0,
+					"timestamp": 4963409364 // utc timestamp
+				},
+				{
+					"id": 3,
+					"pos": 1,
+					"timestamp": 4963409364 // utc timestamp
+				}
+			]
+			"results": [
+				{
+					"answer": "Florian",
+					"position": 1,
+					"result": true
+				},
+				{
+					"answer": "Sven",
+					"position": 0,
+					"result": false
+				}
+			],
+			"completed": true  // has he chosen at least one
+		},
+		...
+	]
+}
+
+
+
+/blah/testing/test1
+	data.json
+	index.html
+	
+/blah/testing/test2
+	data.json
+	index.html
+
+/blah/testing/test3
+	data.json
+	index.html	
+
+
+
+
+### Pages
+
+Page 1 - Welcome
+	- show greeting
+	- show company
+
+Page 2 - Setup
+	- ask for name and contact details
+	- Tell them that they have max timeout seconds time for the whole test and that each question is very limited in time
+	- put a "Start Test" button and tell them that the clock starts once pressed 
+	
+Page 3...n
+	- show a simple test, either single or multiple choice
+	- show countdown for each question and for the whole test on top of the page
+	- automatically load next page once page countdown is over
+	
+Last Page 
+	- Show thankyou message
+	- Provide a feedback form ("is there any feedback for us?")
+	
+
+
+Use HTTP POST to send data
+
+
+

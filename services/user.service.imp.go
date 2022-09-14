@@ -8,7 +8,7 @@ import (
 	"strconv"
 
 	"example.com/m/v2/models"
-	
+
 	"github.com/google/uuid"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -26,8 +26,6 @@ func NewUserService(usercollection *mongo.Collection, ctx context.Context) *User
 		ctx:            ctx,
 	}
 }
-
-
 
 func (u *UserServiceImpl) CreateUser(user *models.Users) error {
 	fmt.Println("user collection created", u.usercollection.Name(), u.usercollection.Database().Name())
@@ -74,7 +72,7 @@ func (u *UserServiceImpl) GetAllUsers() ([]*models.Users, error) {
 
 func (u *UserServiceImpl) UpdateUser(user *models.Users) error {
 	filter := bson.D{primitive.E{Key: "firstname", Value: user.FirstName}}
-	update := bson.D{primitive.E{Key: "$set", Value: bson.D{primitive.E{Key: "name", Value: user.FirstName}, primitive.E{Key: "last_name", Value: user.LastName}, primitive.E{Key: "Email", Value: user.Email}}}}
+	update := bson.D{primitive.E{Key: "$set", Value: bson.D{primitive.E{Key: "name", Value: user.FirstName}, primitive.E{Key: "last_name", Value: user.LastName}, primitive.E{Key: "Contact", Value: user.Contact}}}}
 	result, _ := u.usercollection.UpdateOne(u.ctx, filter, update)
 	if result.MatchedCount != 1 {
 		return errors.New("no matched document found for update")
