@@ -2,22 +2,11 @@ package models
 
 import "time"
 
-type Users struct {
-	ID        int    `json:"id" omniempty:"id"`
-	FirstName string `json:"first_name" omniempty:"first_name"`
-	LastName  string `json:"last_name" `
-	Email     string `json:"email validate:email"`
-}
-
-type Answer struct {
-	AnswerId int    `json:"answer_id"`
-	Answer   string `json:"answer"`
-}
-
+//// TEST db
 type Test struct {
-	Global    Global      `json:"global"`
-	Messages  Messages    `json:"messages"`
-	Questions []Questions `json:"questions"`
+	Global    Global     `json:"global"`
+	Messages  Messages   `json:"messages"`
+	Questions []Question `json:"questions"`
 }
 type Global struct {
 	TestID    int      `json:"test_id"`
@@ -33,7 +22,7 @@ type Messages struct {
 	Thankyou    string `json:"thankyou"`
 	Feedback    string `json:"feedback"`
 }
-type Questions struct {
+type Question struct {
 	ID          int      `json:"id"`
 	Topic       string   `json:"topic"`
 	Timeout     int      `json:"timeout"`
@@ -43,17 +32,34 @@ type Questions struct {
 	Answers     []string `json:"answers"`
 }
 
-type Answers struct {
-	TestID    int    `json:"test_id"`
-	Name      string `json:"name"`
-	Timeout   int    `json:"timeout"`
-	Randomize bool   `json:"randomize"`
+//// User's registed information
+type UserInformation struct {
+	Global Global `json:"global"`
+	Users  Users  `json:"candidate"`
 }
-type Candidate struct {
-	TimeStart string `json:"time_start"`
-	FirstName string `json:"first_name"`
-	LastName  string `json:"last_name"`
-	Contact   string `json:"contact"`
+
+type Users struct {
+	ID        int    `json:"id" omniempty:"id"`
+	FirstName string `json:"first_name" omniempty:"first_name"`
+	LastName  string `json:"last_name" `
+	Email     string `json:"email validate:email"`
+}
+
+//// Returned answers
+type ReturnedAnswer struct {
+	Global                  Global                  `json:"global"`
+	ReturnedUserInformation ReturnedUserInformation `json:"candidate"`
+	Stats                   Stats                   `json:"stats"`
+	UserAnswers             []UserAnswer            `json"questions"`
+}
+
+type ReturnedUserInformation struct {
+	TimeStart    time.Time `json:"time_start"`
+	FirstName    string    `json:"firstname"`
+	LastName     string    `json:"lastname" `
+	Contact      string    `json:"contact"`
+	SendFeedback bool      `json:"send_feedback"`
+	Feedback     string    `json:"feedback"`
 }
 
 type Stats struct {
@@ -62,17 +68,44 @@ type Stats struct {
 }
 
 type UserAnswer struct {
-	Results struct {
-		ID        int       `json:"result_id"`
-		Answer    Answers   `json:"answer"`
-		Position  int       `json:"position"`
-		Result    bool      `json:"result"`
-		Questions Questions `json:"questions"`
-		Clicks    int       `json:"clicks"`
-		History   []struct {
-			HistoryID int       `json:"history_id"`
-			Pos       int       `json:"pos"`
-			Timestamp time.Time `json:" timestamp"`
-		} `json:"history"`
-	} `json:"results"`
+	ID          int       `json:"id"`
+	Timeout     int       `json:"timeout"`
+	Question    string    `json:"question"`
+	Multichoice bool      `json:"multichoice"`
+	Topic       string    ` json:"topic"`
+	Answers     []string  `json:"answers"`
+	Clicks      int       `json:"clicks"`
+	Histories   []History `json:"history"`
+	Results     []Result  `json:"results"`
+	Complete    bool      `json:"completed"`
 }
+
+type History struct {
+	HistoryID int       `json:"id"`
+	Pos       int       `json:"pos"`
+	Timestamp time.Time `json:" timestamp"`
+}
+
+type Result struct {
+	Answer   string `json:"answer"`
+	Position int    `json:"position"`
+	Result   bool   `json:"result"`
+}
+
+// type Answer struct {
+// 	AnswerId int    `json:"answer_id"`
+// 	Answer   string `json:"answer"`
+// }
+
+// type Answers struct {
+// 	AnswerId  int    `json:"answer_id"`
+// 	Name      string `json:"name"`
+// 	Timeout   int    `json:"timeout"`
+// 	Randomize bool   `json:"randomize"`
+// }
+// type Candidate struct {
+// 	TimeStart string `json:"time_start"`
+// 	FirstName string `json:"first_name"`
+// 	LastName  string `json:"last_name"`
+// 	Contact   string `json:"contact"`
+// }
