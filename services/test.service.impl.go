@@ -107,41 +107,56 @@ func (t *TestServiceImpl) CreateTest(Test *mongo.Collection) error {
 	_, err := t.testCollection.InsertOne(t.ctx, Test)
 	return err
 }
-
-func (t *TestServiceImpl) Clicks(test *mongo.Collection) error {
-	// var clicks models.UserAnswer
-
+func (t *TestServiceImpl) StoreUserInfo(Test *mongo.Collection) error {
 	return nil
 }
 
-func (t *TestServiceImpl) StoreAnswer(Results *models.UserAnswer, History *models.History, Result *models.Result, Stats *models.Stats) error {
-	var UserAnswer models.UserAnswer
+func (t *TestServiceImpl) StoreAnswer(Global *models.Global, ReturnedUserInformation *models.ReturnedUserInformation, Results *models.UserAnswer, History *models.History, Result *models.Result, Stats *models.Stats) error {
+	var UserAnswers models.UserAnswer
+	var ReturnedUserInformations models.ReturnedUserInformation
+	var global models.Global
 	var history models.History
 	// var stats models.Stats
 	var result models.Result
 
 	id := uuid.New()
-	UserAnswer.ID = int(id.ID())
+	UserAnswers.ID = int(id.ID())
 	history.HistoryID = int(id.ID())
 
 	StoreAnswer := []interface{}{
 		bson.D{
-			{Key: "id	", Value: UserAnswer.ID},
-			{Key: "timeout	", Value: UserAnswer.Timeout},
-			{Key: "question	", Value: UserAnswer.Question},
-			{Key: "position	", Value: UserAnswer.Multichoice},
-			{Key: "result	", Value: UserAnswer.Topic},
-			{Key: "answer", Value: UserAnswer.Answers},
-			{Key: " clicks", Value: UserAnswer.Clicks},
-			{Key: "timer", Value: UserAnswer.Histories},
-			{Key: "history	", Value: UserAnswer.Histories},
-			{Key: "results", Value: UserAnswer.Results},
-			{Key: "completed", Value: UserAnswer.Complete},
+			{Key: "global", Value: global.TestID},
+			{Key: "name", Value: global.Name},
+			{Key: "company", Value: global.Company},
+			{Key: "timeout", Value: global.Timeout},
+			{Key: "randomize", Value: global.Randomize},
+		},
+		bson.D{
+			{Key: "time_start", Value: ReturnedUserInformations.TimeStart.Day()},
+			{Key: "firstname", Value: ReturnedUserInformations.FirstName},
+			{Key: "lastname", Value: ReturnedUserInformations.LastName},
+			{Key: "Contact", Value: ReturnedUserInformations.Contact},
+			{Key: "send_feedback", Value: ReturnedUserInformations.SendFeedback},
+			{Key: "Feedback", Value: ReturnedUserInformations.Feedback},
 		},
 		bson.D{
 			{Key: "time_start", Value: time.Now().Unix()},
-			{Key: "time_end", Value: time.Now().Unix()},
+			{Key: "time_end", Value: time.Now().Add(30 * time.Second).Unix()},
 		},
+		bson.D{
+			{Key: "id	", Value: UserAnswers.ID},
+			{Key: "timeout	", Value: UserAnswers.Timeout},
+			{Key: "question	", Value: UserAnswers.Question},
+			{Key: "position	", Value: UserAnswers.Multichoice},
+			{Key: "result	", Value: UserAnswers.Topic},
+			{Key: "answer", Value: UserAnswers.Answers},
+			{Key: " clicks", Value: UserAnswers.Clicks},
+			{Key: "timer", Value: UserAnswers.Histories},
+			{Key: "history	", Value: UserAnswers.Histories},
+			{Key: "results", Value: UserAnswers.Results},
+			{Key: "completed", Value: UserAnswers.Complete},
+		},
+
 		bson.D{
 			{Key: "id	", Value: history.HistoryID},
 			{Key: "pos", Value: history.Pos},
@@ -151,8 +166,9 @@ func (t *TestServiceImpl) StoreAnswer(Results *models.UserAnswer, History *model
 			{Key: "answer", Value: result.Answer},
 			{Key: "position	", Value: result.Position},
 			{Key: "result	", Value: result.Result},
-		}}
-	////	timer
+		},
+	}
+	////((	timer
 	// timer := time.NewTimer(2 * time.Second)
 
 	// go func() {
@@ -185,7 +201,8 @@ func (t *TestServiceImpl) StoreAnswer(Results *models.UserAnswer, History *model
 	// 	time.Sleep(10 * time.Second)
 	// 	Clicks.Stop()
 	// 	done <- true
-	// 	Timer :=
+	// 	Timer :=))
+
 	_, err := t.testCollection.InsertMany(t.ctx, StoreAnswer)
 	return err
 }

@@ -19,9 +19,9 @@ func NewQuestionsController(QuestionsService *services.QuestionsServiceImpl) *Qu
 	}
 }
 
-func (qc *QuestionsController) GetQuestions(ctx *gin.Context) {
+func (qc *QuestionsController) GetQuestionsByID(ctx *gin.Context) {
 	var QuestionsID string = ctx.Param("QuestionsID")
-	user, err := qc.QuestionsService.GetQuestions(QuestionsID)
+	user, err := qc.QuestionsService.GetQuestionsByID(QuestionsID)
 	if err != nil {
 		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
 		return
@@ -68,14 +68,19 @@ func (qc *QuestionsController) DeleteQuestions(ctx *gin.Context) {
 }
 
 // not implemented
-// func (qc *QuestionsController) multi_choice(ctx *gin.Context) {
-
+// func (qc *QuestionsController) GetAllQuestions(ctx *gin.Context) {
+// 	Test, err := qc.QuestionsService.GetAllQuestions()
+// 	if err != nil {
+// 		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
+// 		return
+// 	}
+// 	ctx.JSON(http.StatusOK, Test)
 // }
 
 func (qc *QuestionsController) RegisterQuestionsRouterGroup(rg *gin.RouterGroup) {
 	Questionsrouter := rg.Group("/Questions")
 	// Questionsrouter.GET("",qc.GetAllQuestions)
-	Questionsrouter.GET("/:id", qc.GetQuestions)
+	Questionsrouter.GET("/:id", qc.GetQuestionsByID)
 	Questionsrouter.POST("/", qc.CreateQuestions)
 	Questionsrouter.PATCH("/:id", qc.UpdateQuestions)
 	Questionsrouter.DELETE("/:id", qc.DeleteQuestions)

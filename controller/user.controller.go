@@ -33,8 +33,8 @@ func (uc *UserController) CreateUser(ctx *gin.Context) {
 }
 
 func (uc *UserController) GetUserEmail(ctx *gin.Context) {
-	var email string = ctx.Param("email")
-	user, err := uc.userService.GetUserEmail(&email)
+	var Contact string = ctx.Param("contact")
+	user, err := uc.userService.GetUserEmail(&Contact)
 	if err != nil {
 		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
 		return
@@ -52,12 +52,12 @@ func (uc *UserController) GetAllUsers(ctx *gin.Context) {
 }
 
 func (uc *UserController) UpdateUser(ctx *gin.Context) {
-	var user models.Users
-	if err := ctx.ShouldBindJSON(&user); err != nil {
+	var users models.Users
+	if err := ctx.ShouldBindJSON(&users); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 		return
 	}
-	err := uc.userService.UpdateUser(&user)
+	err := uc.userService.UpdateUser(&users)
 	if err != nil {
 		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
 		return
@@ -77,9 +77,10 @@ func (uc *UserController) DeleteUser(ctx *gin.Context) {
 
 func (uc *UserController) RegisterRouterGroup(rg *gin.RouterGroup) {
 	userroute := rg.Group("/users")
-	userroute.GET("/:email", uc.GetUserEmail)
+	userroute.GET("/:contact", uc.GetUserEmail)
+
 	userroute.POST("", uc.CreateUser)
-	userroute.PATCH("/:id", uc.UpdateUser)
+	userroute.PATCH("/:first_name", uc.UpdateUser)
 	userroute.DELETE("/:id", uc.DeleteUser)
 	userroute.GET("/", uc.GetAllUsers)
 

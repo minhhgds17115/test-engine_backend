@@ -50,7 +50,7 @@ type ReturnedAnswer struct {
 	Global                  Global                  `json:"global"`
 	ReturnedUserInformation ReturnedUserInformation `json:"candidate"`
 	Stats                   Stats                   `json:"stats"`
-	UserAnswers             []UserAnswer            `json"questions"`
+	UserAnswers             UserAnswer              `json"userAnswer"`
 }
 
 type ReturnedUserInformation struct {

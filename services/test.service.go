@@ -8,6 +8,6 @@ type TestService interface {
 	GetTestID(models.Test) error
 	UpdateTest(models.Test) error
 	DeleteTest(models.Test) error
-	StoreAnswer(models.UserAnswer) error
+	StoreAnswer([]models.ReturnedAnswer) error
 	StoreHistory(models.UserAnswer) error
 }

@@ -36,9 +36,9 @@ func (u *UserServiceImpl) CreateUser(user *models.Users) error {
 	return err
 }
 
-func (u *UserServiceImpl) GetUserEmail(email *string) (*models.Users, error) {
+func (u *UserServiceImpl) GetUserEmail(Contact *string) (*models.Users, error) {
 	var user *models.Users
-	query := bson.D{bson.E{Key: "email", Value: email}}
+	query := bson.D{bson.E{Key: "contact", Value: Contact}}
 	err := u.usercollection.FindOne(u.ctx, query).Decode(&user)
 	return user, err
 }
@@ -70,9 +70,9 @@ func (u *UserServiceImpl) GetAllUsers() ([]*models.Users, error) {
 	return users, nil
 }
 
-func (u *UserServiceImpl) UpdateUser(user *models.Users) error {
-	filter := bson.D{primitive.E{Key: "firstname", Value: user.FirstName}}
-	update := bson.D{primitive.E{Key: "$set", Value: bson.D{primitive.E{Key: "name", Value: user.FirstName}, primitive.E{Key: "last_name", Value: user.LastName}, primitive.E{Key: "Contact", Value: user.Contact}}}}
+func (u *UserServiceImpl) UpdateUser(users *models.Users) error {
+	filter := bson.D{primitive.E{Key: "first_name", Value: users.FirstName}}
+	update := bson.D{primitive.E{Key: "$set", Value: bson.D{primitive.E{Key: "first_name", Value: users.FirstName}, primitive.E{Key: "last_name", Value: users.LastName}, primitive.E{Key: "Contact", Value: users.Contact}}}}
 	result, _ := u.usercollection.UpdateOne(u.ctx, filter, update)
 	if result.MatchedCount != 1 {
 		return errors.New("no matched document found for update")

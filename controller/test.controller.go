@@ -54,6 +54,8 @@ func (tc *TestController) UpdateTest(ctx *gin.Context) {
 
 func (tc *TestController) StoreAnswer(ctx *gin.Context) {
 	var UserAnswer models.UserAnswer
+	var Global models.Global
+	var ReturnedUserInformation models.ReturnedUserInformation
 	var history models.History
 	var result models.Result
 	var stats models.Stats
@@ -63,7 +65,7 @@ func (tc *TestController) StoreAnswer(ctx *gin.Context) {
 		return
 	}
 
-	err := tc.testService.StoreAnswer(&UserAnswer, &history, &result, &stats)
+	err := tc.testService.StoreAnswer(&Global, &ReturnedUserInformation, &UserAnswer, &history, &result, &stats)
 	if err != nil {
 		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
 		return

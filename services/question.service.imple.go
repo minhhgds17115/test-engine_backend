@@ -52,9 +52,13 @@ func (u *QuestionsServiceImpl) DeleteQuestions(QuestionsId string) error {
 	return nil
 }
 
-func (u *QuestionsServiceImpl) GetQuestions(QuestionsId string) (*models.Question, error) {
+func (u *QuestionsServiceImpl) GetQuestionsByID(QuestionsId string) (*models.Question, error) {
 	var QuestionsIDs *models.Question
 	query := bson.D{bson.E{Key: "id", Value: QuestionsIDs}}
 	err := u.QuestionsCollection.FindOne(u.ctx, query).Decode(&QuestionsIDs)
 	return QuestionsIDs, err
+}
+
+func (u *QuestionsServiceImpl) GetAllAnswerQuestions(Questions *models.Question) {
+
 }
