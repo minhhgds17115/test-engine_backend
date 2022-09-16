@@ -1,12 +1,10 @@
 package models
 
-import "time"
-
 //// TEST db
 type Test struct {
-	Global    Global     `json:"global"`
-	Messages  Messages   `json:"messages"`
-	Questions []Question `json:"questions"`
+	Global   Global     `json:"global"`
+	Messages Messages   `json:"messages"`
+	Question []Question `json:"questions"`
 }
 type Global struct {
 	TestID    int      `json:"test_id"`
@@ -23,25 +21,26 @@ type Messages struct {
 	Feedback    string `json:"feedback"`
 }
 type Question struct {
-	ID          int      `json:"id"`
-	Topic       string   `json:"topic"`
-	Timeout     int      `json:"timeout"`
-	Question    string   `json:"question"`
-	Information string   `json:"information"`
-	Multichoice bool     `json:"multichoice"`
-	Answers     []string `json:"answers"`
+	ID          int    `json:"id"`
+	Topic       string `json:"topic"`
+	Timeout     int    `json:"timeout"`
+	Question    string `json:"question"`
+	Information string `json:"information"`
+	Multichoice bool   `json:"multichoice"`
+	Answers     Answer `json:"answers"`
 }
 
 //// User's registed information
 type UserInformation struct {
-	Global Global `json:"global"`
-	Users  Users  `json:"candidate"`
+	Global    Global    `json:"global"`
+	Candidate Candidate `json:"candidate"`
 }
 
-type Users struct {
+type Candidate struct {
 	ID        int    `json:"id" omniempty:"id"`
-	FirstName string `json:"first_name" omniempty:"first_name"`
-	LastName  string `json:"last_name" `
+	TimeStart int64  `json:"time_start"`
+	FirstName string `json:"firstname" omniempty:"firstname"`
+	LastName  string `json:"lastname" `
 	Contact   string `json:"contact" omniempty:"contact"`
 }
 
@@ -50,40 +49,40 @@ type ReturnedAnswer struct {
 	Global                  Global                  `json:"global"`
 	ReturnedUserInformation ReturnedUserInformation `json:"candidate"`
 	Stats                   Stats                   `json:"stats"`
-	UserAnswers             UserAnswer              `json"userAnswer"`
+	Questions               Questions               `json:"questions"`
 }
 
 type ReturnedUserInformation struct {
-	TimeStart    time.Time `json:"time_start"`
-	FirstName    string    `json:"firstname"`
-	LastName     string    `json:"lastname" `
-	Contact      string    `json:"contact"`
-	SendFeedback bool      `json:"send_feedback"`
-	Feedback     string    `json:"feedback"`
+	TimeStart    int64  `json:"time_start"`
+	FirstName    string `json:"firstname"`
+	LastName     string `json:"lastname" `
+	Contact      string `json:"contact"`
+	SendFeedback bool   `json:"send_feedback"`
+	Feedback     string `json:"feedback"`
 }
 
 type Stats struct {
-	TimeStart time.Time `json:"time_start" omniempty:"time_start"`
-	TimeEnd   time.Time `json:"time_end"`
+	TimeStart int64 `json:"time_start" omniempty:"time_start"`
+	TimeEnd   int64 `json:"time_end"`
 }
 
-type UserAnswer struct {
-	ID          int       `json:"id"`
-	Timeout     int       `json:"timeout"`
-	Question    string    `json:"question"`
-	Multichoice bool      `json:"multichoice"`
-	Topic       string    ` json:"topic"`
-	Answers     []string  `json:"answers"`
-	Clicks      int       `json:"clicks"`
-	Histories   []History `json:"history"`
-	Results     []Result  `json:"results"`
-	Complete    bool      `json:"completed"`
+type Questions struct {
+	ID          int      `json:"id"`
+	Timeout     int      `json:"timeout"`
+	Question    Question `json:"questions"`
+	Multichoice bool     `json:"multichoice"`
+	Topic       string   ` json:"topic"`
+	Answer      Answer   `json:"answer"`
+	Clicks      int      `json:"clicks"`
+	Histories   History  `json:"history"`
+	Results     []Result `json:"results"`
+	Complete    bool     `json:"completed"`
 }
 
 type History struct {
-	HistoryID int       `json:"id"`
-	Pos       int       `json:"pos"`
-	Timestamp time.Time `json:" timestamp"`
+	HistoryID int   `json:"history_id"`
+	Pos       int   `json:"pos"`
+	Timestamp int64 `json:" timestamp"`
 }
 
 type Result struct {
@@ -93,19 +92,21 @@ type Result struct {
 }
 
 type Answer struct {
-	AnswerId int    `json:"answer_id"`
-	Answer   string `json:"answer"`
+	AnswerId int `json:"answer_id"`
+
+	Answer string `json:"answer"`
 }
 
-// type Answers struct {
-// 	AnswerId  int    `json:"answer_id"`
-// 	Name      string `json:"name"`
-// 	Timeout   int    `json:"timeout"`
-// 	Randomize bool   `json:"randomize"`
-// }
+type Answers struct {
+	AnswersId int    `json:"answers_id"`
+	Name      string `json:"name"`
+	Timeout   int    `json:"timeout"`
+	Randomize bool   `json:"randomize"`
+}
+
 // type Candidate struct {
 // 	TimeStart string `json:"time_start"`
-// 	FirstName string `json:"first_name"`
-// 	LastName  string `json:"last_name"`
+// 	FirstName string `json:"firstname"`
+// 	LastName  string `json:"lastname"`
 // 	Contact   string `json:"contact"`
 // }

@@ -19,12 +19,12 @@ func NewController(userServices *services.UserServiceImpl) *UserController {
 }
 
 func (uc *UserController) CreateUser(ctx *gin.Context) {
-	var user models.Users
-	if err := ctx.ShouldBindJSON(&user); err != nil {
+	var Candidate models.Candidate
+	if err := ctx.ShouldBindJSON(&Candidate); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 		return
 	}
-	err := uc.userService.CreateUser(&user)
+	err := uc.userService.CreateUser(&Candidate)
 	if err != nil {
 		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
 		return
@@ -34,30 +34,30 @@ func (uc *UserController) CreateUser(ctx *gin.Context) {
 
 func (uc *UserController) GetUserEmail(ctx *gin.Context) {
 	var Contact string = ctx.Param("contact")
-	user, err := uc.userService.GetUserEmail(&Contact)
+	Candidate, err := uc.userService.GetUserEmail(&Contact)
 	if err != nil {
 		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
 		return
 	}
-	ctx.JSON(http.StatusOK, user)
+	ctx.JSON(http.StatusOK, Candidate)
 }
 
 func (uc *UserController) GetAllUsers(ctx *gin.Context) {
-	users, err := uc.userService.GetAllUsers()
+	Candidate, err := uc.userService.GetAllUsers()
 	if err != nil {
 		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
 		return
 	}
-	ctx.JSON(http.StatusOK, users)
+	ctx.JSON(http.StatusOK, Candidate)
 }
 
 func (uc *UserController) UpdateUser(ctx *gin.Context) {
-	var users models.Users
-	if err := ctx.ShouldBindJSON(&users); err != nil {
+	var Candidate models.Candidate
+	if err := ctx.ShouldBindJSON(&Candidate); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 		return
 	}
-	err := uc.userService.UpdateUser(&users)
+	err := uc.userService.UpdateUser(&Candidate)
 	if err != nil {
 		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
 		return
@@ -76,10 +76,10 @@ func (uc *UserController) DeleteUser(ctx *gin.Context) {
 }
 
 func (uc *UserController) RegisterRouterGroup(rg *gin.RouterGroup) {
-	userroute := rg.Group("/users")
+	userroute := rg.Group("/Candidate")
 	userroute.GET("/:contact", uc.GetUserEmail)
 
-	userroute.POST("", uc.CreateUser)
+	userroute.POST("/", uc.CreateUser)
 	userroute.PATCH("/:first_name", uc.UpdateUser)
 	userroute.DELETE("/:id", uc.DeleteUser)
 	userroute.GET("/", uc.GetAllUsers)

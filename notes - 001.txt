@@ -47,10 +47,7 @@
 }
 
 
-
-
-
-
+//// User's registed information
 "https://send.results.com/api/v1/?id=1"
 
 
@@ -71,7 +68,7 @@
 }
 
 
-
+//// Returned answers
 "https://send.results.com/api/v1/?id=2"
 
 

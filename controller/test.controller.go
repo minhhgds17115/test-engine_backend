@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -51,21 +52,36 @@ func (tc *TestController) UpdateTest(ctx *gin.Context) {
 	}
 	ctx.JSON(http.StatusOK, gin.H{"message": "success"})
 }
+func (tc *TestController) ReturnInfo(ctx *gin.Context) {
+	var userInformation models.UserInformation
 
-func (tc *TestController) StoreAnswer(ctx *gin.Context) {
-	var UserAnswer models.UserAnswer
-	var Global models.Global
-	var ReturnedUserInformation models.ReturnedUserInformation
-	var history models.History
-	var result models.Result
-	var stats models.Stats
+	if err := ctx.ShouldBindJSON(&userInformation); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
+		fmt.Println("Global ")
+		return
+	}
 
-	if err := ctx.ShouldBindJSON(&UserAnswer); err != nil {
+	fmt.Println("global handler ", userInformation)
+
+	err := tc.testService.StoreUserInfo(&userInformation)
+	if err != nil {
+		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
+		fmt.Println("Information return ")
+		return
+	}
+	ctx.JSON(http.StatusOK, gin.H{"message": "Success"})
+
+}
+
+func (tc *TestController) ReturnAnswer(ctx *gin.Context) {
+	var returnedAnswer models.ReturnedAnswer
+
+	if err := ctx.ShouldBindJSON(&returnedAnswer); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 		return
 	}
 
-	err := tc.testService.StoreAnswer(&Global, &ReturnedUserInformation, &UserAnswer, &history, &result, &stats)
+	err := tc.testService.ReturnAnswer(&returnedAnswer)
 	if err != nil {
 		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
 		return
@@ -79,6 +95,6 @@ func (tc *TestController) RegisterTestRouterGroup(rg *gin.RouterGroup) {
 	testroute.PATCH(":id", tc.UpdateTest)
 	testroute.GET("/", tc.GetAllTest)
 	testroute.GET("/:id", tc.GetTestID)
-	testroute.POST("/answer", tc.StoreAnswer)
-	// testroute.POST("/history", tc.StoreHistory)
+	testroute.POST("/answer", tc.ReturnAnswer)
+	testroute.POST("/returninfo", tc.ReturnInfo)
 }

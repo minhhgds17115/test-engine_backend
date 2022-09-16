@@ -51,7 +51,7 @@ func init() {
 	userc = mongoclient.Database("test-engine").Collection("User")
 	questionc = mongoclient.Database("test-engine").Collection("Question")
 	answerc = mongoclient.Database("test-engine").Collection("Answer")
-	testc = mongoclient.Database("test-engine").Collection("Test")
+	testc = mongoclient.Database("test-engine").Collection("test")
 	us = services.NewUserService(userc, ctx)
 	as = services.NewAnswerServices(answerc, ctx)
 	qs = services.NewQuestionsServices(questionc, ctx)

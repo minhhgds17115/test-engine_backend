@@ -30,12 +30,12 @@ func (qc *QuestionsController) GetQuestionsByID(ctx *gin.Context) {
 }
 
 func (qc *QuestionsController) CreateQuestions(ctx *gin.Context) {
-	var Questions models.Question
-	if err := ctx.ShouldBindJSON(&Questions); err != nil {
+	var Question models.Question
+	if err := ctx.ShouldBindJSON(&Question); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 		return
 	}
-	err := qc.QuestionsService.CreateQuestions(&Questions)
+	err := qc.QuestionsService.CreateQuestions(&Question)
 	if err != nil {
 		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
 		return
@@ -45,12 +45,12 @@ func (qc *QuestionsController) CreateQuestions(ctx *gin.Context) {
 }
 
 func (qc *QuestionsController) UpdateQuestions(ctx *gin.Context) {
-	var Questions models.Question
-	if err := ctx.ShouldBindJSON(&Questions); err != nil {
+	var Question models.Question
+	if err := ctx.ShouldBindJSON(&Question); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 		return
 	}
-	err := qc.QuestionsService.UpdateQuestions(&Questions)
+	err := qc.QuestionsService.UpdateQuestions(&Question)
 	if err != nil {
 		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
 		return
@@ -78,7 +78,7 @@ func (qc *QuestionsController) DeleteQuestions(ctx *gin.Context) {
 // }
 
 func (qc *QuestionsController) RegisterQuestionsRouterGroup(rg *gin.RouterGroup) {
-	Questionsrouter := rg.Group("/Questions")
+	Questionsrouter := rg.Group("/Question")
 	// Questionsrouter.GET("",qc.GetAllQuestions)
 	Questionsrouter.GET("/:id", qc.GetQuestionsByID)
 	Questionsrouter.POST("/", qc.CreateQuestions)

@@ -76,7 +76,7 @@ func (ac *AnswerController) RegisterAnswerRouterGroup(rg *gin.RouterGroup) {
 	answerrouter := rg.Group("/answer")
 	// answerrouter.GET("", ac.GetAllAnswer)
 	answerrouter.GET("/:id", ac.GetAnswer)
-	answerrouter.POST("", ac.CreateAnswer)
+	answerrouter.POST("/", ac.CreateAnswer)
 	answerrouter.PATCH("/:id", ac.UpdateAnswer)
 	answerrouter.DELETE(":id", ac.DeleteAnswer)
 	// answerrouter.POST("", ac.PostAnswer)

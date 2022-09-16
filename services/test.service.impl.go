@@ -87,11 +87,11 @@ func (t *TestServiceImpl) GetTestID(TestID *int) (*models.Test, error) {
 func (t *TestServiceImpl) UpdateTest(Test *models.Test) error {
 	filter := bson.D{primitive.E{Key: "id", Value: Test.Global.TestID}}
 	multichoice := make([]bool, 0)
-	for _, question := range Test.Questions {
+	for _, question := range Test.Question {
 		multichoice = append(multichoice, question.Multichoice)
 	}
 	topic := make([]string, 0)
-	for _, question := range Test.Questions {
+	for _, question := range Test.Question {
 		topic = append(topic, question.Topic)
 	}
 	update := bson.D{primitive.E{Key: "$set", Value: bson.D{primitive.E{Key: "timeout", Value: Test.Global.Timeout}, primitive.E{Key: "multichoice", Value: multichoice}, primitive.E{Key: "topic", Value: topic}}}}
@@ -107,102 +107,66 @@ func (t *TestServiceImpl) CreateTest(Test *mongo.Collection) error {
 	_, err := t.testCollection.InsertOne(t.ctx, Test)
 	return err
 }
-func (t *TestServiceImpl) StoreUserInfo(Test *mongo.Collection) error {
+func (t *TestServiceImpl) StoreUserInfo(userInformation *models.UserInformation) error {
+	// var ReturnedUserInformations models.ReturnedUserInformation
+	// var global models.Global
+
+	fmt.Println("this is global ", userInformation)
+
+	id := uuid.New()
+	userInformation.Global.TestID = int(id.ID())
+	userInformation.Candidate.ID = int(id.ID())
+
+	userInformation.Candidate.TimeStart = time.Now().Unix()
+	// ReturnInfo := []interface{}{
+	// 	bson.D{
+	// 		{Key: "global", Value: userInformation.TestID},
+	// 		{Key: "name", Value: global.Name},
+	// 		{Key: "company", Value: global.Company},
+	// 		{Key: "timeout", Value: global.Timeout},
+	// 		{Key: "randomize", Value: global.Randomize},
+	// 	},
+	// 	bson.D{
+	// 		{Key: "time_start", Value: ReturnedUserInformations.TimeStart.Day()},
+	// 		{Key: "firstname", Value: ReturnedUserInformations.FirstName},
+	// 		{Key: "lastname", Value: ReturnedUserInformations.LastName},
+	// 		{Key: "contact", Value: ReturnedUserInformations.Contact},
+	// 		{Key: "send_feedback", Value: ReturnedUserInformations.SendFeedback},
+	// 		{Key: "feedback", Value: ReturnedUserInformations.Feedback},
+	// 	},
+	// }
+
+	_, err := t.testCollection.InsertOne(t.ctx, userInformation)
+	if err != nil {
+		return err
+	}
+	// if ReturnInfo == nil && err == nil {
+	// 	return errors.New("no return info")
+	// }
+	// fmt.Println("Information return ")
 	return nil
 }
 
-func (t *TestServiceImpl) StoreAnswer(Global *models.Global, ReturnedUserInformation *models.ReturnedUserInformation, Results *models.UserAnswer, History *models.History, Result *models.Result, Stats *models.Stats) error {
-	var UserAnswers models.UserAnswer
-	var ReturnedUserInformations models.ReturnedUserInformation
-	var global models.Global
-	var history models.History
-	// var stats models.Stats
-	var result models.Result
+func (t *TestServiceImpl) ReturnAnswer(returnAnswer *models.ReturnedAnswer) error {
 
+	// uuid validation
 	id := uuid.New()
-	UserAnswers.ID = int(id.ID())
-	history.HistoryID = int(id.ID())
+	returnAnswer.Global.TestID = int(id.ID())
+	returnAnswer.Questions.ID = int(id.ID())
+	returnAnswer.Questions.Question.ID = int(id.ID())
+	returnAnswer.Questions.Answer.AnswerId = int(id.ID())
+	returnAnswer.Questions.Question.Answers.AnswerId = int(id.ID())
+	returnAnswer.Questions.Histories.HistoryID = int(id.ID())
 
-	StoreAnswer := []interface{}{
-		bson.D{
-			{Key: "global", Value: global.TestID},
-			{Key: "name", Value: global.Name},
-			{Key: "company", Value: global.Company},
-			{Key: "timeout", Value: global.Timeout},
-			{Key: "randomize", Value: global.Randomize},
-		},
-		bson.D{
-			{Key: "time_start", Value: ReturnedUserInformations.TimeStart.Day()},
-			{Key: "firstname", Value: ReturnedUserInformations.FirstName},
-			{Key: "lastname", Value: ReturnedUserInformations.LastName},
-			{Key: "Contact", Value: ReturnedUserInformations.Contact},
-			{Key: "send_feedback", Value: ReturnedUserInformations.SendFeedback},
-			{Key: "Feedback", Value: ReturnedUserInformations.Feedback},
-		},
-		bson.D{
-			{Key: "time_start", Value: time.Now().Unix()},
-			{Key: "time_end", Value: time.Now().Add(30 * time.Second).Unix()},
-		},
-		bson.D{
-			{Key: "id	", Value: UserAnswers.ID},
-			{Key: "timeout	", Value: UserAnswers.Timeout},
-			{Key: "question	", Value: UserAnswers.Question},
-			{Key: "position	", Value: UserAnswers.Multichoice},
-			{Key: "result	", Value: UserAnswers.Topic},
-			{Key: "answer", Value: UserAnswers.Answers},
-			{Key: " clicks", Value: UserAnswers.Clicks},
-			{Key: "timer", Value: UserAnswers.Histories},
-			{Key: "history	", Value: UserAnswers.Histories},
-			{Key: "results", Value: UserAnswers.Results},
-			{Key: "completed", Value: UserAnswers.Complete},
-		},
+	// time
+	returnAnswer.Stats.TimeStart = time.Now().Unix()
+	returnAnswer.Stats.TimeEnd = time.Now().Unix()
+	returnAnswer.Questions.Histories.Timestamp = time.Now().Unix()
+	returnAnswer.ReturnedUserInformation.TimeStart = time.Now().Unix()
 
-		bson.D{
-			{Key: "id	", Value: history.HistoryID},
-			{Key: "pos", Value: history.Pos},
-			{Key: "timestamp", Value: time.Now().Unix()},
-		},
-		bson.D{
-			{Key: "answer", Value: result.Answer},
-			{Key: "position	", Value: result.Position},
-			{Key: "result	", Value: result.Result},
-		},
+	_, err := t.testCollection.InsertOne(t.ctx, returnAnswer)
+	if err != nil {
+		return err
 	}
-	////((	timer
-	// timer := time.NewTimer(2 * time.Second)
-
-	// go func() {
-	// 	<-timer.C
-
-	// 	// Printed when timer is fired
-	// 	fmt.Println("timer inactivated")
-	// }()
-
-	// stopTimer := timer.Stop()
-
-	// if stopTimer {
-	// 	fmt.Println("Out of times")
-	// }
-	// time.Sleep(10 * time.Second)
-	// 	//clicks counter
-	// 	Clicks := time.NewTicker(1 * time.Second)
-	// 	done := make(chan bool)
-
-	// 	go func() {
-	// 		for {
-	// 			select {
-	// 			case <-done:
-	// 				return
-	// 			case t := <-timer.C:
-	// 				fmt.Println("Ticks at", t)
-	// 			}
-	// 		}
-	// 	}()
-	// 	time.Sleep(10 * time.Second)
-	// 	Clicks.Stop()
-	// 	done <- true
-	// 	Timer :=))
-
-	_, err := t.testCollection.InsertMany(t.ctx, StoreAnswer)
 	return err
 }

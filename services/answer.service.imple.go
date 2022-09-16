@@ -55,9 +55,3 @@ func (u *AnswerServiceImpl) GetAnswer(Answerid int) (*models.Answer, error) {
 	err := u.answerColllection.FindOne(u.ctx, query).Decode(&Answerid)
 	return answerid, err
 }
-
-// func (u *AnswerServiceImpl) PostAnswer(Answer *models.Answer) error {
-// 	// fmt.Println("New answerd recoreded ", u.answerColllection.Name(), u.answerColllection.Database().Name())
-// 	// _, err := u.answerColllection.InsertOne(u.ctx, *Answer)
-// 	// return err
-// }
