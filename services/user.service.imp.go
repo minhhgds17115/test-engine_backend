@@ -10,7 +10,7 @@ import (
 
 	"example.com/m/v2/models"
 
-	"github.com/google/uuid"
+	// "github.com/google/uuid"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -30,8 +30,8 @@ func NewUserService(usercollection *mongo.Collection, ctx context.Context) *User
 
 func (u *UserServiceImpl) CreateUser(Candidate *models.Candidate) error {
 	fmt.Println("Candidate collection created", u.usercollection.Name(), u.usercollection.Database().Name())
-	id := uuid.New()
-	Candidate.ID = int(id.ID())
+	// id := uuid.New()
+	// Candidate.ID = int(id.ID())
 
 	Candidate.TimeStart = time.Now().Unix()
 	fmt.Println(*Candidate)
@@ -93,4 +93,20 @@ func (u *UserServiceImpl) DeleteUser(id *string) error {
 		return errors.New("no matched Candidate found for delete")
 	}
 	return nil
+}
+
+func (u *UserServiceImpl) UserInformation(UserInformation *models.UserInformation) error {
+
+	_, err := u.usercollection.InsertOne(u.ctx, UserInformation)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (u *UserServiceImpl) GetUserTestID(TestID *int) (*models.Global, error) {
+	var testID *models.Global
+	query := bson.D{bson.E{Key: "test_id", Value: TestID}}
+	err := u.usercollection.FindOne(u.ctx, query).Decode(&TestID)
+	return testID, err
 }

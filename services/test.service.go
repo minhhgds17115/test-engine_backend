@@ -11,4 +11,5 @@ type TestService interface {
 	StoreUserInfo(models.UserInformation) error
 	ReturnAnswer(models.ReturnedAnswer) error
 	ReturnUserInfo(models.Global, models.ReturnedUserInformation) error
+	StoreTestCandidate(models.Test) error
 }

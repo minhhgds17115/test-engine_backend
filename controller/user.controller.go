@@ -2,6 +2,7 @@ package controller
 
 import (
 	"net/http"
+	"strconv"
 
 	"example.com/m/v2/models"
 	"example.com/m/v2/services"
@@ -75,10 +76,36 @@ func (uc *UserController) DeleteUser(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{"message": "success"})
 }
 
+func (uc *UserController) UserInformation(ctx *gin.Context) {
+	var userInformation models.UserInformation
+	if err := ctx.ShouldBindJSON(&userInformation); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
+		return
+	}
+	err := uc.userService.UserInformation(&userInformation)
+	if err != nil {
+		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
+		return
+	}
+	ctx.JSON(http.StatusOK, gin.H{"message": "success"})
+}
+
+func (uc *UserController) GetUserTestID(ctx *gin.Context) {
+	TestID, _ := strconv.Atoi(ctx.Param("test_id"))
+	Global, err := uc.userService.GetUserTestID(&TestID)
+	if err != nil {
+		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
+		return
+	}
+	ctx.JSON(http.StatusOK, Global)
+
+}
+
 func (uc *UserController) RegisterRouterGroup(rg *gin.RouterGroup) {
 	userroute := rg.Group("/Candidate")
-	userroute.GET("/:contact", uc.GetUserEmail)
-
+	// userroute.GET("/:contact", uc.GetUserEmail)
+	userroute.GET("/:id", uc.GetUserTestID)
+	userroute.POST("/userInformation", uc.UserInformation)
 	userroute.POST("/", uc.CreateUser)
 	userroute.PATCH("/:first_name", uc.UpdateUser)
 	userroute.DELETE("/:id", uc.DeleteUser)

@@ -4,10 +4,8 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"time"
 
 	"example.com/m/v2/models"
-	"github.com/google/uuid"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -75,23 +73,24 @@ func (t *TestServiceImpl) GetAllTest() ([]*models.Test, error) {
 	return tests, nil
 }
 
+// get test
 func (t *TestServiceImpl) GetTestID(TestID *int) (*models.Test, error) {
-	var testId *models.Test
+	var test *models.Test
 	fmt.Println(*TestID)
-	query := bson.D{bson.E{Key: "global.test_id", Value: *TestID}}
-	err := t.testCollection.FindOne(t.ctx, query).Decode(&testId)
+	query := bson.D{bson.E{Key: "test_id", Value: TestID}}
+	err := t.testCollection.FindOne(t.ctx, query).Decode(&test)
 
-	return testId, err
+	return test, err
 }
 
 func (t *TestServiceImpl) UpdateTest(Test *models.Test) error {
 	filter := bson.D{primitive.E{Key: "id", Value: Test.Global.TestID}}
 	multichoice := make([]bool, 0)
-	for _, question := range Test.Question {
+	for _, question := range Test.Questions {
 		multichoice = append(multichoice, question.Multichoice)
 	}
 	topic := make([]string, 0)
-	for _, question := range Test.Question {
+	for _, question := range Test.Questions {
 		topic = append(topic, question.Topic)
 	}
 	update := bson.D{primitive.E{Key: "$set", Value: bson.D{primitive.E{Key: "timeout", Value: Test.Global.Timeout}, primitive.E{Key: "multichoice", Value: multichoice}, primitive.E{Key: "topic", Value: topic}}}}
@@ -113,11 +112,11 @@ func (t *TestServiceImpl) StoreUserInfo(userInformation *models.UserInformation)
 
 	fmt.Println("this is global ", userInformation)
 
-	id := uuid.New()
-	userInformation.Global.TestID = int(id.ID())
-	userInformation.Candidate.ID = int(id.ID())
+	// id := uuid.New()
+	// userInformation.Global.TestID = int(id.ID())
+	// userInformation.Candidate.ID = int(id.ID())
 
-	userInformation.Candidate.TimeStart = time.Now().Unix()
+	// userInformation.Candidate.TimeStart = time.Now().Unix()
 	// ReturnInfo := []interface{}{
 	// 	bson.D{
 	// 		{Key: "global", Value: userInformation.TestID},
@@ -150,21 +149,39 @@ func (t *TestServiceImpl) StoreUserInfo(userInformation *models.UserInformation)
 func (t *TestServiceImpl) ReturnAnswer(returnAnswer *models.ReturnedAnswer) error {
 
 	// uuid validation
-	id := uuid.New()
-	returnAnswer.Global.TestID = int(id.ID())
-	returnAnswer.Questions.ID = int(id.ID())
-	returnAnswer.Questions.Question.ID = int(id.ID())
-	returnAnswer.Questions.Answer.AnswerId = int(id.ID())
-	returnAnswer.Questions.Question.Answers.AnswerId = int(id.ID())
-	returnAnswer.Questions.Histories.HistoryID = int(id.ID())
+	// id := uuid.New()
+	// returnAnswer.Global.TestID = int(id.ID())
+
+	// returnAnswer.Questions[0].Question.ID = int(id.ID())
+	// returnAnswer.Questions.Answer.AnswerId = int(id.ID())
+	// returnAnswer.Questions.Question.Answers.AnswerId = int(id.ID())
+	// returnAnswer.Questions.Histories.HistoryID = int(id.ID())
 
 	// time
-	returnAnswer.Stats.TimeStart = time.Now().Unix()
-	returnAnswer.Stats.TimeEnd = time.Now().Unix()
-	returnAnswer.Questions.Histories.Timestamp = time.Now().Unix()
-	returnAnswer.ReturnedUserInformation.TimeStart = time.Now().Unix()
+	// returnAnswer.Stats.TimeStart = time.Now().Unix()
+	// returnAnswer.Stats.TimeEnd = time.Now().Unix()
+	// returnAnswer.Questions.Histories.Timestamp = time.Now().Unix()
+	// returnAnswer.ReturnedUserInformation.TimeStart = time.Now().Unix()
+
+	// clicks
+	// returnAnswer.Questions.Clicks =
+
+	// Answers
+	// returnAnswer.Questions.Answers =
+
+	//Results
+	// returnAnswer.Questions.Question = []models.Questions.Question.
 
 	_, err := t.testCollection.InsertOne(t.ctx, returnAnswer)
+	if err != nil {
+		return err
+	}
+	return err
+}
+
+func (t *TestServiceImpl) StoreTestCandidate(test *models.Test) error {
+
+	_, err := t.testCollection.InsertOne(t.ctx, test)
 	if err != nil {
 		return err
 	}

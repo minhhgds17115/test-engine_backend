@@ -4,7 +4,7 @@ package models
 type Test struct {
 	Global   Global     `json:"global"`
 	Messages Messages   `json:"messages"`
-	Question []Question `json:"questions"`
+	Questions []Questions `json:"questions"`
 }
 type Global struct {
 	TestID    int      `json:"test_id"`
@@ -20,7 +20,7 @@ type Messages struct {
 	Thankyou    string `json:"thankyou"`
 	Feedback    string `json:"feedback"`
 }
-type Question struct {
+type Questions struct {
 	ID          int      `json:"id"`
 	Topic       string   `json:"topic"`
 	Timeout     int      `json:"timeout"`
@@ -69,7 +69,7 @@ type Stats struct {
 type ReturnedQuestion struct {
 	ID          int       `json:"id"`
 	Timeout     int       `json:"timeout"`
-	Question    Question  `json:"questions"`
+	Question    string    `json:"question"`
 	Multichoice bool      `json:"multichoice"`
 	Topic       string    `json:"topic"`
 	Answers     []string  `json:"answers"`

@@ -6,7 +6,7 @@ import (
 	"strconv"
 
 	"example.com/m/v2/models"
-	"github.com/google/uuid"
+	// "github.com/google/uuid"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -24,16 +24,16 @@ func NewQuestionsServices(QuestionsCollection *mongo.Collection, ctx context.Con
 	}
 }
 
-func (u *QuestionsServiceImpl) CreateQuestions(Question *models.Question) error {
-	id := uuid.New()
-	Question.ID = int(id.ID())
-	Question.Answers.AnswerId = int(id.ID())
+func (u *QuestionsServiceImpl) CreateQuestions(Question *models.Questions) error {
+	// id := uuid.New()
+	// Question.ID = int(id.ID())
+	// Question.Answers.AnswerId = int(id.ID())
 
 	_, err := u.QuestionsCollection.InsertOne(u.ctx, Question)
 	return err
 }
 
-func (u *QuestionsServiceImpl) UpdateQuestions(Question *models.Question) error {
+func (u *QuestionsServiceImpl) UpdateQuestions(Question *models.Questions) error {
 	filter := bson.D{primitive.E{Key: "id", Value: Question.ID}}
 	update := bson.D{primitive.E{Key: "$set", Value: bson.D{primitive.E{Key: "ID", Value: Question.ID}, primitive.E{Key: "Information", Value: Question.Information}, primitive.E{Key: "Topic", Value: Question.Topic}, primitive.E{Key: "Timeouts", Value: Question.Timeout}}}}
 	result, _ := u.QuestionsCollection.UpdateOne(u.ctx, filter, update)
@@ -53,8 +53,8 @@ func (u *QuestionsServiceImpl) DeleteQuestions(QuestionsId string) error {
 	return nil
 }
 
-func (u *QuestionsServiceImpl) GetQuestionsByID(QuestionsId string) (*models.Question, error) {
-	var QuestionsIDs *models.Question
+func (u *QuestionsServiceImpl) GetQuestionsByID(QuestionsId string) (*models.Questions, error) {
+	var QuestionsIDs *models.Questions
 	query := bson.D{bson.E{Key: "id", Value: QuestionsIDs}}
 	err := u.QuestionsCollection.FindOne(u.ctx, query).Decode(&QuestionsIDs)
 	return QuestionsIDs, err

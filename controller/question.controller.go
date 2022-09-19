@@ -30,7 +30,7 @@ func (qc *QuestionsController) GetQuestionsByID(ctx *gin.Context) {
 }
 
 func (qc *QuestionsController) CreateQuestions(ctx *gin.Context) {
-	var Question models.Question
+	var Question models.Questions
 	if err := ctx.ShouldBindJSON(&Question); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 		return
@@ -45,7 +45,7 @@ func (qc *QuestionsController) CreateQuestions(ctx *gin.Context) {
 }
 
 func (qc *QuestionsController) UpdateQuestions(ctx *gin.Context) {
-	var Question models.Question
+	var Question models.Questions
 	if err := ctx.ShouldBindJSON(&Question); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 		return

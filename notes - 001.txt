@@ -1,6 +1,6 @@
-
+// get test
 { 
-	"gobal": {
+	"global": {
 		"test_id": 1,
 		"name": "test name 1",
 		"company": "DISION",
@@ -47,12 +47,12 @@
 }
 
 
-//// User's registed information
+//// User's registed information UserInformation
 "https://send.results.com/api/v1/?id=1"
 
 
 { 
-	"gobal": {
+	"global": {
 		"test_id": 1,
 		"name": "test name 1",
 		"timeout": 300,		// timeout is seconds
@@ -68,12 +68,12 @@
 }
 
 
-//// Returned answers
+//// Returned answers // Return Answer
 "https://send.results.com/api/v1/?id=2"
 
 
 { 
-	"gobal": {
+	"global": {
 		"test_id": 1,
 		"name": "test name 1",
 		"timeout": 300,		// timeout is seconds
@@ -186,6 +186,3 @@ Last Page
 
 
 Use HTTP POST to send data
-
-
-
