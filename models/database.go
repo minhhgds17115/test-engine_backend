@@ -21,13 +21,13 @@ type Messages struct {
 	Feedback    string `json:"feedback"`
 }
 type Question struct {
-	ID          int    `json:"id"`
-	Topic       string `json:"topic"`
-	Timeout     int    `json:"timeout"`
-	Question    string `json:"question"`
-	Information string `json:"information"`
-	Multichoice bool   `json:"multichoice"`
-	Answers     Answer `json:"answers"`
+	ID          int      `json:"id"`
+	Topic       string   `json:"topic"`
+	Timeout     int      `json:"timeout"`
+	Question    string   `json:"question"`
+	Information string   `json:"information"`
+	Multichoice bool     `json:"multichoice"`
+	Answers     []string `json:"answers"`
 }
 
 //// User's registed information
@@ -37,7 +37,7 @@ type UserInformation struct {
 }
 
 type Candidate struct {
-	ID        int    `json:"id" omniempty:"id"`
+	// ID        int    `json:"id" omniempty:"id"`
 	TimeStart int64  `json:"time_start"`
 	FirstName string `json:"firstname" omniempty:"firstname"`
 	LastName  string `json:"lastname" `
@@ -49,7 +49,7 @@ type ReturnedAnswer struct {
 	Global                  Global                  `json:"global"`
 	ReturnedUserInformation ReturnedUserInformation `json:"candidate"`
 	Stats                   Stats                   `json:"stats"`
-	Questions               Questions               `json:"questions"`
+	Questions               []ReturnedQuestion      `json:"questions"`
 }
 
 type ReturnedUserInformation struct {
@@ -66,23 +66,23 @@ type Stats struct {
 	TimeEnd   int64 `json:"time_end"`
 }
 
-type Questions struct {
-	ID          int      `json:"id"`
-	Timeout     int      `json:"timeout"`
-	Question    Question `json:"questions"`
-	Multichoice bool     `json:"multichoice"`
-	Topic       string   ` json:"topic"`
-	Answer      Answer   `json:"answer"`
-	Clicks      int      `json:"clicks"`
-	Histories   History  `json:"history"`
-	Results     []Result `json:"results"`
-	Complete    bool     `json:"completed"`
+type ReturnedQuestion struct {
+	ID          int       `json:"id"`
+	Timeout     int       `json:"timeout"`
+	Question    Question  `json:"questions"`
+	Multichoice bool      `json:"multichoice"`
+	Topic       string    `json:"topic"`
+	Answers     []string  `json:"answers"`
+	Clicks      int       `json:"clicks"`
+	Histories   []History `json:"history"`
+	Results     []Result  `json:"results"`
+	Complete    bool      `json:"completed"`
 }
 
 type History struct {
-	HistoryID int   `json:"history_id"`
+	HistoryID int   `json:"id"`
 	Pos       int   `json:"pos"`
-	Timestamp int64 `json:" timestamp"`
+	Timestamp int64 `json:"timestamp"`
 }
 
 type Result struct {
