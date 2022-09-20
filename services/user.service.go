@@ -8,5 +8,5 @@ type UserService interface {
 	GetAllUsers() ([]models.Candidate, error)
 	updateUser(models.Candidate) error
 	deleteUser(models.Candidate) error
-	GetUserTestID(models.UserInformation) error
+	GetUserTestID(models.CandidateInformation) error
 }

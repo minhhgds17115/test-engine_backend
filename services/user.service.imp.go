@@ -16,19 +16,19 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-type UserServiceImpl struct {
+type CandidateServiceImpl struct {
 	usercollection *mongo.Collection
 	ctx            context.Context
 }
 
-func NewUserService(usercollection *mongo.Collection, ctx context.Context) *UserServiceImpl {
-	return &UserServiceImpl{
+func NewCandidateService(usercollection *mongo.Collection, ctx context.Context) *CandidateServiceImpl {
+	return &CandidateServiceImpl{
 		usercollection: usercollection,
 		ctx:            ctx,
 	}
 }
 
-func (u *UserServiceImpl) CreateUser(Candidate *models.Candidate) error {
+func (u *CandidateServiceImpl) CreateCandidate(Candidate *models.Candidate) error {
 	fmt.Println("Candidate collection created", u.usercollection.Name(), u.usercollection.Database().Name())
 	// id := uuid.New()
 	// Candidate.ID = int(id.ID())
@@ -39,14 +39,14 @@ func (u *UserServiceImpl) CreateUser(Candidate *models.Candidate) error {
 	return err
 }
 
-func (u *UserServiceImpl) GetUserEmail(Contact *string) (*models.Candidate, error) {
+func (u *CandidateServiceImpl) GetCandidateEmail(Contact *string) (*models.Candidate, error) {
 	var Candidate *models.Candidate
 	query := bson.D{bson.E{Key: "contact", Value: Contact}}
 	err := u.usercollection.FindOne(u.ctx, query).Decode(&Candidate)
 	return Candidate, err
 }
 
-func (u *UserServiceImpl) GetAllUsers() ([]*models.Candidate, error) {
+func (u *CandidateServiceImpl) GetAllCandidates() ([]*models.Candidate, error) {
 	var Candidate []*models.Candidate
 	cursor, err := u.usercollection.Find(u.ctx, bson.D{{}})
 	if err != nil {
@@ -73,7 +73,7 @@ func (u *UserServiceImpl) GetAllUsers() ([]*models.Candidate, error) {
 	return Candidate, nil
 }
 
-func (u *UserServiceImpl) UpdateUser(Candidate *models.Candidate) error {
+func (u *CandidateServiceImpl) UpdateCandidate(Candidate *models.Candidate) error {
 	filter := bson.D{primitive.E{Key: "first_name", Value: Candidate.FirstName}}
 	update := bson.D{primitive.E{Key: "$set", Value: bson.D{primitive.E{Key: "first_name", Value: Candidate.FirstName}, primitive.E{Key: "last_name", Value: Candidate.LastName}, primitive.E{Key: "Contact", Value: Candidate.Contact}}}}
 	result, _ := u.usercollection.UpdateOne(u.ctx, filter, update)
@@ -83,7 +83,7 @@ func (u *UserServiceImpl) UpdateUser(Candidate *models.Candidate) error {
 	return nil
 }
 
-func (u *UserServiceImpl) DeleteUser(id *string) error {
+func (u *CandidateServiceImpl) DeleteCandidate(id *string) error {
 	idNumber, _ := strconv.Atoi(*id)
 	filter := bson.D{primitive.E{Key: "id", Value: idNumber}}
 
@@ -95,18 +95,32 @@ func (u *UserServiceImpl) DeleteUser(id *string) error {
 	return nil
 }
 
-func (u *UserServiceImpl) UserInformation(UserInformation *models.UserInformation) error {
+func (u *CandidateServiceImpl) CandidateInformation(CandidateInformation *models.CandidateInformation) error {
 
-	_, err := u.usercollection.InsertOne(u.ctx, UserInformation)
+	_, err := u.usercollection.InsertOne(u.ctx, CandidateInformation)
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
-func (u *UserServiceImpl) GetUserTestID(TestID *int) (*models.Global, error) {
-	var testID *models.Global
-	query := bson.D{bson.E{Key: "test_id", Value: TestID}}
-	err := u.usercollection.FindOne(u.ctx, query).Decode(&TestID)
-	return testID, err
+func (u *CandidateServiceImpl) GetCandidateTestID(FirstName *string) (*models.CandidateInformation, error) {
+	var test *models.CandidateInformation
+	query := bson.D{bson.E{Key: "firstname"}}
+	err := u.usercollection.FindOne(u.ctx, query).Decode(&test)
+	return test, err
+}
+
+func (u *CandidateServiceImpl) StoreTestCandidate(test *models.Test) error {
+	// for _, TestID := range Global {
+	// 	if TestID != nil {
+
+	// 	}
+	// }
+
+	_, err := u.usercollection.InsertOne(u.ctx, test)
+	if err != nil {
+		return err
+	}
+	return err
 }

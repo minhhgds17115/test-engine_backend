@@ -43,19 +43,19 @@ func (tc *TestController) UpdateTest(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{"message": "success"})
 }
 
-// UserInformation
-func (tc *TestController) StoreUserInfo(ctx *gin.Context) {
-	var userInformation models.UserInformation
+// CandidateInformation
+func (tc *TestController) StoreCandidateInfo(ctx *gin.Context) {
+	var candidateInformation models.CandidateInformation
 
-	if err := ctx.ShouldBindJSON(&userInformation); err != nil {
+	if err := ctx.ShouldBindJSON(&candidateInformation); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 		fmt.Println("Global ")
 		return
 	}
 
-	fmt.Println("global handler ", userInformation)
+	fmt.Println("global handler ", candidateInformation)
 
-	err := tc.testService.StoreUserInfo(&userInformation)
+	err := tc.testService.StoreCandidateInfo(&candidateInformation)
 	if err != nil {
 		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
 		fmt.Println("Information return ")
@@ -84,6 +84,16 @@ func (tc *TestController) ReturnAnswer(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{"message": "success"})
 }
 
+// func (tc *TestController) GetInfo(ctx *gin.Context) {
+// 	testId, _ := strconv.Atoi(ctx.Param("id"))
+// 	Candidate, err := tc.testService.GetTestID(&testId)
+// 	if err != nil {
+// 		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
+// 		return
+// 	}
+// 	ctx.JSON(http.StatusOK, Candidate)
+// }
+
 func (tc *TestController) GetTestID(ctx *gin.Context) {
 	testId, _ := strconv.Atoi(ctx.Param("id"))
 	Test, err := tc.testService.GetTestID(&testId)
@@ -94,41 +104,12 @@ func (tc *TestController) GetTestID(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, Test)
 }
 
-func (tc *TestController) StoreTestCandidate(ctx *gin.Context) {
-	var testInfo models.Test
-
-	if err := ctx.ShouldBindJSON(&testInfo); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
-		return
-	}
-
-	err := tc.testService.StoreTestCandidate(&testInfo)
-	if err != nil {
-		ctx.JSON(http.StatusOK, gin.H{"message": err.Error()})
-		return
-	}
-
-	ctx.JSON(http.StatusOK, gin.H{"message": "success"})
-}
-
-// func (tc *TestController) GetInfo(ctx *gin.Context) {
-// 	testId, _ := strconv.Atoi(ctx.Param("id"))
-// 	user, err := tc.testService.GetTestID(&testId)
-// 	if err != nil {
-// 		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
-// 		return
-// 	}
-// 	ctx.JSON(http.StatusOK, user)
-// }
-
 func (tc *TestController) RegisterTestRouterGroup(rg *gin.RouterGroup) {
 	testroute := rg.Group("/test")
 	testroute.PATCH("/:id", tc.UpdateTest)
 	testroute.GET("", tc.GetAllTest)
 	testroute.GET("/:id", tc.GetTestID)
-	testroute.POST("/userInfo", tc.StoreUserInfo)
+	testroute.POST("/candidate-info", tc.StoreCandidateInfo)
 	testroute.POST("/answer", tc.ReturnAnswer)
-
-	testroute.POST("/storeCandidate", tc.StoreTestCandidate)
 
 }

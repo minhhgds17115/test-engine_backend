@@ -2,30 +2,29 @@ package controller
 
 import (
 	"net/http"
-	"strconv"
 
 	"example.com/m/v2/models"
 	"example.com/m/v2/services"
 	"github.com/gin-gonic/gin"
 )
 
-type UserController struct {
-	userService *services.UserServiceImpl
+type CandidateController struct {
+	userService *services.CandidateServiceImpl
 }
 
-func NewController(userServices *services.UserServiceImpl) *UserController {
-	return &UserController{
+func NewController(userServices *services.CandidateServiceImpl) *CandidateController {
+	return &CandidateController{
 		userService: userServices,
 	}
 }
 
-func (uc *UserController) CreateUser(ctx *gin.Context) {
+func (uc *CandidateController) CreateCandidate(ctx *gin.Context) {
 	var Candidate models.Candidate
 	if err := ctx.ShouldBindJSON(&Candidate); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 		return
 	}
-	err := uc.userService.CreateUser(&Candidate)
+	err := uc.userService.CreateCandidate(&Candidate)
 	if err != nil {
 		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
 		return
@@ -33,9 +32,9 @@ func (uc *UserController) CreateUser(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{"message": "success"})
 }
 
-func (uc *UserController) GetUserEmail(ctx *gin.Context) {
+func (uc *CandidateController) GetCandidateEmail(ctx *gin.Context) {
 	var Contact string = ctx.Param("contact")
-	Candidate, err := uc.userService.GetUserEmail(&Contact)
+	Candidate, err := uc.userService.GetCandidateEmail(&Contact)
 	if err != nil {
 		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
 		return
@@ -43,8 +42,8 @@ func (uc *UserController) GetUserEmail(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, Candidate)
 }
 
-func (uc *UserController) GetAllUsers(ctx *gin.Context) {
-	Candidate, err := uc.userService.GetAllUsers()
+func (uc *CandidateController) GetAllCandidates(ctx *gin.Context) {
+	Candidate, err := uc.userService.GetAllCandidates()
 	if err != nil {
 		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
 		return
@@ -52,13 +51,13 @@ func (uc *UserController) GetAllUsers(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, Candidate)
 }
 
-func (uc *UserController) UpdateUser(ctx *gin.Context) {
+func (uc *CandidateController) UpdateCandidate(ctx *gin.Context) {
 	var Candidate models.Candidate
 	if err := ctx.ShouldBindJSON(&Candidate); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 		return
 	}
-	err := uc.userService.UpdateUser(&Candidate)
+	err := uc.userService.UpdateCandidate(&Candidate)
 	if err != nil {
 		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
 		return
@@ -66,9 +65,9 @@ func (uc *UserController) UpdateUser(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{"message": "success"})
 }
 
-func (uc *UserController) DeleteUser(ctx *gin.Context) {
+func (uc *CandidateController) DeleteCandidate(ctx *gin.Context) {
 	var FirstName string = ctx.Param("id")
-	err := uc.userService.DeleteUser(&FirstName)
+	err := uc.userService.DeleteCandidate(&FirstName)
 	if err != nil {
 		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
 		return
@@ -76,13 +75,13 @@ func (uc *UserController) DeleteUser(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{"message": "success"})
 }
 
-func (uc *UserController) UserInformation(ctx *gin.Context) {
-	var userInformation models.UserInformation
+func (uc *CandidateController) CandidateInformation(ctx *gin.Context) {
+	var userInformation models.CandidateInformation
 	if err := ctx.ShouldBindJSON(&userInformation); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 		return
 	}
-	err := uc.userService.UserInformation(&userInformation)
+	err := uc.userService.CandidateInformation(&userInformation)
 	if err != nil {
 		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
 		return
@@ -90,25 +89,44 @@ func (uc *UserController) UserInformation(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{"message": "success"})
 }
 
-func (uc *UserController) GetUserTestID(ctx *gin.Context) {
-	TestID, _ := strconv.Atoi(ctx.Param("test_id"))
-	Global, err := uc.userService.GetUserTestID(&TestID)
+func (uc *CandidateController) GetCandidateTestID(ctx *gin.Context) {
+	var FirstName string = ctx.Param("firstname")
+	CandidateInformation, err := uc.userService.GetCandidateTestID(&FirstName)
 	if err != nil {
 		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
 		return
 	}
-	ctx.JSON(http.StatusOK, Global)
+	ctx.JSON(http.StatusOK, CandidateInformation)
 
 }
 
-func (uc *UserController) RegisterRouterGroup(rg *gin.RouterGroup) {
+func (uc *CandidateController) StoreTestCandidate(ctx *gin.Context) {
+	var testInfo models.Test
+
+	if err := ctx.ShouldBindJSON(&testInfo); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
+		return
+	}
+
+	err := uc.userService.StoreTestCandidate(&testInfo)
+	if err != nil {
+		ctx.JSON(http.StatusOK, gin.H{"message": err.Error()})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{"message": "success"})
+}
+
+func (uc *CandidateController) RegisterRouterGroup(rg *gin.RouterGroup) {
 	userroute := rg.Group("/Candidate")
-	// userroute.GET("/:contact", uc.GetUserEmail)
-	userroute.GET("/:id", uc.GetUserTestID)
-	userroute.POST("/userInformation", uc.UserInformation)
-	userroute.POST("/", uc.CreateUser)
-	userroute.PATCH("/:first_name", uc.UpdateUser)
-	userroute.DELETE("/:id", uc.DeleteUser)
-	userroute.GET("/", uc.GetAllUsers)
+	// userroute.GET("/:contact", uc.GetCandidateEmail)
+	userroute.GET("/:id", uc.GetCandidateTestID)
+	userroute.POST("/user-information", uc.CandidateInformation)
+	userroute.POST("/", uc.CreateCandidate)
+	userroute.PATCH("/:firstname", uc.UpdateCandidate)
+	userroute.DELETE("/:id", uc.DeleteCandidate)
+	userroute.GET("/", uc.GetAllCandidates)
+
+	userroute.POST("/store-candidate", uc.StoreTestCandidate)
 
 }

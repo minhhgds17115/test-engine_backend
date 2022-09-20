@@ -16,11 +16,11 @@ import (
 
 var (
 	server      *gin.Engine
-	us          *services.UserServiceImpl
+	us          *services.CandidateServiceImpl
 	as          *services.AnswerServiceImpl
 	qs          *services.QuestionsServiceImpl
 	ts          *services.TestServiceImpl
-	uc          *controller.UserController
+	uc          *controller.CandidateController
 	qc          *controller.QuestionsController
 	ac          *controller.AnswerController
 	tc          *controller.TestController
@@ -48,11 +48,11 @@ func init() {
 
 	fmt.Println("mongo connection established")
 
-	userc = mongoclient.Database("test-engine").Collection("User")
+	userc = mongoclient.Database("test-engine").Collection("Candidate")
 	questionc = mongoclient.Database("test-engine").Collection("Question")
 	answerc = mongoclient.Database("test-engine").Collection("Answer")
 	testc = mongoclient.Database("test-engine").Collection("test")
-	us = services.NewUserService(userc, ctx)
+	us = services.NewCandidateService(userc, ctx)
 	as = services.NewAnswerServices(answerc, ctx)
 	qs = services.NewQuestionsServices(questionc, ctx)
 	ts = services.NewTestService(testc, ctx)

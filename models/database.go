@@ -30,8 +30,8 @@ type Questions struct {
 	Answers     []string `json:"answers"`
 }
 
-//// User's registed information
-type UserInformation struct {
+//// Candidate's registed information
+type CandidateInformation struct {
 	Global    Global    `json:"global"`
 	Candidate Candidate `json:"candidate"`
 }
@@ -47,12 +47,12 @@ type Candidate struct {
 //// Returned answers
 type ReturnedAnswer struct {
 	Global                  Global                  `json:"global"`
-	ReturnedUserInformation ReturnedUserInformation `json:"candidate"`
+	ReturnedCandidateInformation ReturnedCandidateInformation `json:"candidate"`
 	Stats                   Stats                   `json:"stats"`
 	Questions               []ReturnedQuestion      `json:"questions"`
 }
 
-type ReturnedUserInformation struct {
+type ReturnedCandidateInformation struct {
 	TimeStart    int64  `json:"time_start"`
 	FirstName    string `json:"firstname"`
 	LastName     string `json:"lastname" `

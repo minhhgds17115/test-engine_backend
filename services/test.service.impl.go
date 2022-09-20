@@ -77,7 +77,7 @@ func (t *TestServiceImpl) GetAllTest() ([]*models.Test, error) {
 func (t *TestServiceImpl) GetTestID(TestID *int) (*models.Test, error) {
 	var test *models.Test
 	fmt.Println(*TestID)
-	query := bson.D{bson.E{Key: "test_id", Value: TestID}}
+	query := bson.D{bson.E{Key: "test_id"}}
 	err := t.testCollection.FindOne(t.ctx, query).Decode(&test)
 
 	return test, err
@@ -106,11 +106,11 @@ func (t *TestServiceImpl) CreateTest(Test *mongo.Collection) error {
 	_, err := t.testCollection.InsertOne(t.ctx, Test)
 	return err
 }
-func (t *TestServiceImpl) StoreUserInfo(userInformation *models.UserInformation) error {
+func (t *TestServiceImpl) StoreCandidateInfo(candidateInformation *models.CandidateInformation) error {
 	// var ReturnedUserInformations models.ReturnedUserInformation
 	// var global models.Global
 
-	fmt.Println("this is global ", userInformation)
+	fmt.Println("this is global ", candidateInformation)
 
 	// id := uuid.New()
 	// userInformation.Global.TestID = int(id.ID())
@@ -135,7 +135,8 @@ func (t *TestServiceImpl) StoreUserInfo(userInformation *models.UserInformation)
 	// 	},
 	// }
 
-	_, err := t.testCollection.InsertOne(t.ctx, userInformation)
+	
+	_, err := t.testCollection.InsertOne(t.ctx, candidateInformation)
 	if err != nil {
 		return err
 	}
@@ -173,15 +174,6 @@ func (t *TestServiceImpl) ReturnAnswer(returnAnswer *models.ReturnedAnswer) erro
 	// returnAnswer.Questions.Question = []models.Questions.Question.
 
 	_, err := t.testCollection.InsertOne(t.ctx, returnAnswer)
-	if err != nil {
-		return err
-	}
-	return err
-}
-
-func (t *TestServiceImpl) StoreTestCandidate(test *models.Test) error {
-
-	_, err := t.testCollection.InsertOne(t.ctx, test)
 	if err != nil {
 		return err
 	}

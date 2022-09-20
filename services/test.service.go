@@ -8,8 +8,8 @@ type TestService interface {
 	GetTestID(models.Test) error
 	UpdateTest(models.Test) error
 	DeleteTest(models.Test) error
-	StoreUserInfo(models.UserInformation) error
+	StoreUserInfo(models.CandidateInformation) error
 	ReturnAnswer(models.ReturnedAnswer) error
-	ReturnUserInfo(models.Global, models.ReturnedUserInformation) error
+	ReturnUserInfo(models.Global, models.ReturnedCandidateInformation) error
 	StoreTestCandidate(models.Test) error
 }
