@@ -6,6 +6,7 @@ import (
 	"fmt"
 
 	"example.com/m/v2/models"
+	"github.com/google/uuid"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -74,8 +75,8 @@ func (t *TestServiceImpl) GetAllTest() ([]*models.Test, error) {
 }
 
 // get test
-func (t *TestServiceImpl) GetTestID(TestID *int) (*models.Test, error) {
-	var test *models.Test
+func (t *TestServiceImpl) GetTestID(TestID *int) (*models.ReturnedAnswer, error) {
+	var test *models.ReturnedAnswer
 	fmt.Println(*TestID)
 	query := bson.D{bson.E{Key: "test_id"}}
 	err := t.testCollection.FindOne(t.ctx, query).Decode(&test)
@@ -109,11 +110,17 @@ func (t *TestServiceImpl) CreateTest(Test *mongo.Collection) error {
 func (t *TestServiceImpl) StoreCandidateInfo(candidateInformation *models.CandidateInformation) error {
 	// var ReturnedUserInformations models.ReturnedUserInformation
 	// var global models.Global
-
+	// newCandidateInformation := NewCandidateInterface{}
+	// vErrs, err := validation.Run(NewCandidateInterface)
 	fmt.Println("this is global ", candidateInformation)
+	// if err != nil {
+	// 	return err
+	// }
+	// if len(vErrs) > 0 {
+	// }
 
-	// id := uuid.New()
-	// userInformation.Global.TestID = int(id.ID())
+	id := uuid.New()
+	candidateInformation.Global.TestID = int(id.ID())
 	// userInformation.Candidate.ID = int(id.ID())
 
 	// userInformation.Candidate.TimeStart = time.Now().Unix()
@@ -135,7 +142,6 @@ func (t *TestServiceImpl) StoreCandidateInfo(candidateInformation *models.Candid
 	// 	},
 	// }
 
-	
 	_, err := t.testCollection.InsertOne(t.ctx, candidateInformation)
 	if err != nil {
 		return err
@@ -150,8 +156,8 @@ func (t *TestServiceImpl) StoreCandidateInfo(candidateInformation *models.Candid
 func (t *TestServiceImpl) ReturnAnswer(returnAnswer *models.ReturnedAnswer) error {
 
 	// uuid validation
-	// id := uuid.New()
-	// returnAnswer.Global.TestID = int(id.ID())
+	id := uuid.New()
+	returnAnswer.Global.TestID = int(id.ID())
 
 	// returnAnswer.Questions[0].Question.ID = int(id.ID())
 	// returnAnswer.Questions.Answer.AnswerId = int(id.ID())

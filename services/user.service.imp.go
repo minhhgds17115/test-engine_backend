@@ -9,6 +9,7 @@ import (
 	"strconv"
 
 	"example.com/m/v2/models"
+	"github.com/google/uuid"
 
 	// "github.com/google/uuid"
 	"go.mongodb.org/mongo-driver/bson"
@@ -27,6 +28,8 @@ func NewCandidateService(usercollection *mongo.Collection, ctx context.Context) 
 		ctx:            ctx,
 	}
 }
+
+
 
 func (u *CandidateServiceImpl) CreateCandidate(Candidate *models.Candidate) error {
 	fmt.Println("Candidate collection created", u.usercollection.Name(), u.usercollection.Database().Name())
@@ -96,7 +99,8 @@ func (u *CandidateServiceImpl) DeleteCandidate(id *string) error {
 }
 
 func (u *CandidateServiceImpl) CandidateInformation(CandidateInformation *models.CandidateInformation) error {
-
+	id := uuid.New()
+	CandidateInformation.Global.TestID = int(id.ID())
 	_, err := u.usercollection.InsertOne(u.ctx, CandidateInformation)
 	if err != nil {
 		return err
@@ -104,11 +108,15 @@ func (u *CandidateServiceImpl) CandidateInformation(CandidateInformation *models
 	return nil
 }
 
-func (u *CandidateServiceImpl) GetCandidateTestID(FirstName *string) (*models.CandidateInformation, error) {
-	var test *models.CandidateInformation
-	query := bson.D{bson.E{Key: "firstname"}}
-	err := u.usercollection.FindOne(u.ctx, query).Decode(&test)
-	return test, err
+func (u *CandidateServiceImpl) GetCandidateTestID(TestID *int) (*models.CandidateInformation, error) {
+	var quiz *models.CandidateInformation
+	fmt.Println(*TestID)
+	query := bson.D{bson.E{Key: "test_id"}}
+	err := u.usercollection.FindOne(u.ctx, query).Decode(&quiz)
+	if query != nil || err != nil {
+		return nil, errors.New("could not find candidate information")
+	}
+	return quiz, err
 }
 
 func (u *CandidateServiceImpl) StoreTestCandidate(test *models.Test) error {
@@ -117,6 +125,8 @@ func (u *CandidateServiceImpl) StoreTestCandidate(test *models.Test) error {
 
 	// 	}
 	// }
+	id := uuid.New()
+	test.Global.TestID = int(id.ID())
 
 	_, err := u.usercollection.InsertOne(u.ctx, test)
 	if err != nil {

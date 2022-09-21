@@ -2,6 +2,7 @@ package controller
 
 import (
 	"net/http"
+	"strconv"
 
 	"example.com/m/v2/models"
 	"example.com/m/v2/services"
@@ -90,8 +91,11 @@ func (uc *CandidateController) CandidateInformation(ctx *gin.Context) {
 }
 
 func (uc *CandidateController) GetCandidateTestID(ctx *gin.Context) {
-	var FirstName string = ctx.Param("firstname")
-	CandidateInformation, err := uc.userService.GetCandidateTestID(&FirstName)
+	testId, _ := strconv.Atoi(ctx.Param("test_id"))
+	CandidateInformation, err := uc.userService.GetCandidateTestID(&testId)
+	if CandidateInformation == nil {
+		ctx.JSON(http.StatusNotFound, gin.H{"message": err.Error()})
+	}
 	if err != nil {
 		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
 		return

@@ -1,13 +1,17 @@
 package models
 
-//// TEST db
+import (
+	"github.com/go4all/validation/types"
+)
+
+// // TEST db
 type Test struct {
-	Global   Global     `json:"global"`
-	Messages Messages   `json:"messages"`
+	Global    Global      `json:"global"`
+	Messages  Messages    `json:"messages"`
 	Questions []Questions `json:"questions"`
 }
 type Global struct {
-	TestID    int      `json:"test_id"`
+	TestID    int      `json:"test_id" `
 	Name      string   `json:"name"`
 	Company   string   `json:"company"`
 	Timeout   int      `json:"timeout"`
@@ -21,7 +25,7 @@ type Messages struct {
 	Feedback    string `json:"feedback"`
 }
 type Questions struct {
-	ID          int      `json:"id"`
+	ID          int      `json:"id" `
 	Topic       string   `json:"topic"`
 	Timeout     int      `json:"timeout"`
 	Question    string   `json:"question"`
@@ -30,7 +34,7 @@ type Questions struct {
 	Answers     []string `json:"answers"`
 }
 
-//// Candidate's registed information
+// // Candidate's registed information
 type CandidateInformation struct {
 	Global    Global    `json:"global"`
 	Candidate Candidate `json:"candidate"`
@@ -41,28 +45,28 @@ type Candidate struct {
 	TimeStart int64  `json:"time_start"`
 	FirstName string `json:"firstname" omniempty:"firstname"`
 	LastName  string `json:"lastname" `
-	Contact   string `json:"contact" omniempty:"contact"`
+	Contact   string `json:"contact" omniempty:"email"`
 }
 
-//// Returned answers
+// // Returned answers
 type ReturnedAnswer struct {
-	Global                  Global                  `json:"global"`
+	Global                       Global                       `json:"global"`
 	ReturnedCandidateInformation ReturnedCandidateInformation `json:"candidate"`
-	Stats                   Stats                   `json:"stats"`
-	Questions               []ReturnedQuestion      `json:"questions"`
+	Stats                        Stats                        `json:"stats"`
+	Questions                    []ReturnedQuestion           `json:"questions"`
 }
 
 type ReturnedCandidateInformation struct {
 	TimeStart    int64  `json:"time_start"`
-	FirstName    string `json:"firstname"`
-	LastName     string `json:"lastname" `
+	FirstName    string `json:"firstname" validate:"required"`
+	LastName     string `json:"lastname" validate:"required" `
 	Contact      string `json:"contact"`
 	SendFeedback bool   `json:"send_feedback"`
 	Feedback     string `json:"feedback"`
 }
 
 type Stats struct {
-	TimeStart int64 `json:"time_start" omniempty:"time_start"`
+	TimeStart int64 `json:"time_start" `
 	TimeEnd   int64 `json:"time_end"`
 }
 
@@ -104,9 +108,59 @@ type Answers struct {
 	Randomize bool   `json:"randomize"`
 }
 
-// type Candidate struct {
-// 	TimeStart string `json:"time_start"`
-// 	FirstName string `json:"firstname"`
-// 	LastName  string `json:"lastname"`
-// 	Contact   string `json:"contact"`
-// }
+func (request Test) ValidationTest() (types.RuleMap, types.MessageMap) {
+	TestRules := types.RuleMap{
+		"test_id": {"required"},
+		"name":    {"required"},
+	}
+	TestMessages := types.MessageMap{
+		"name": {
+			"required": "Please enter your name",
+		},
+	}
+	return TestRules, TestMessages
+}
+
+func (request CandidateInformation) CandidateInformationValidate() (types.RuleMap, types.MessageMap) {
+	CandidateRule := types.RuleMap{
+		"test_id": {"required"},
+		"name":    {"required"},
+
+		"firstname": {"required"},
+		"lastname":  {"required"},
+		"contact":   {"required", "email"},
+	}
+	CandidateMessages := types.MessageMap{
+		"name": {
+			"required": "Please enter your name",
+		},
+		"firstname": {"required": "Please enter your name"},
+		"lastname":  {"required": "Please enter your last name"},
+		"contact": {
+			"required": "Please enter your contact",
+			"email":    "Not valid email address"},
+	}
+	return CandidateRule, CandidateMessages
+}
+
+func (request ReturnedAnswer) ReturnedAnswerValidate() (types.RuleMap, types.MessageMap) {
+	ReturnedAnswerRule := types.RuleMap{
+		"test_id": {"required"},
+		"name":    {"required"},
+
+		"firstname": {"required"},
+		"lastname":  {"required"},
+		"contact":   {"required", "email"},
+	}
+	ReturnedAnswerMessages := types.MessageMap{
+		"name": {
+			"required": "Please enter your name",
+		},
+		"firstname": {"required": "Please enter your name"},
+		"lastname":  {"required": "Please enter your last name"},
+		"contact": {
+			"required": "Please enter your contact",
+			"email":    "Not valid email address"},
+	}
+	return ReturnedAnswerRule, ReturnedAnswerMessages
+}

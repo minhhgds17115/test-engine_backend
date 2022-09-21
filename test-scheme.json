@@ -1,0 +1,17 @@
+{
+    "title": "Global",
+    "description": "",
+    "required": ["test_id","name"],
+    "type": "object",
+    "properties": {
+        "test_id": {
+            "type": "integer",
+            "description": "test ID for test"
+       },
+       "name" : {
+        "type": "string", 
+        "description": "Name for test"}
+    }
+    
+}
+

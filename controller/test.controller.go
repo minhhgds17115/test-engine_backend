@@ -46,7 +46,7 @@ func (tc *TestController) UpdateTest(ctx *gin.Context) {
 // CandidateInformation
 func (tc *TestController) StoreCandidateInfo(ctx *gin.Context) {
 	var candidateInformation models.CandidateInformation
-
+	
 	if err := ctx.ShouldBindJSON(&candidateInformation); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 		fmt.Println("Global ")
@@ -97,6 +97,7 @@ func (tc *TestController) ReturnAnswer(ctx *gin.Context) {
 func (tc *TestController) GetTestID(ctx *gin.Context) {
 	testId, _ := strconv.Atoi(ctx.Param("id"))
 	Test, err := tc.testService.GetTestID(&testId)
+
 	if err != nil {
 		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
 		return
