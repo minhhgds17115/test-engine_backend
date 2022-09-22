@@ -7,6 +7,7 @@ import (
 
 	"example.com/m/v2/models"
 	"example.com/m/v2/services"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -19,6 +20,8 @@ func NewTestController(testService *services.TestServiceImpl) *TestController {
 		testService: testService,
 	}
 }
+
+
 
 func (tc *TestController) GetAllTest(ctx *gin.Context) {
 	Test, err := tc.testService.GetAllTest()
@@ -46,7 +49,7 @@ func (tc *TestController) UpdateTest(ctx *gin.Context) {
 // CandidateInformation
 func (tc *TestController) StoreCandidateInfo(ctx *gin.Context) {
 	var candidateInformation models.CandidateInformation
-	
+
 	if err := ctx.ShouldBindJSON(&candidateInformation); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 		fmt.Println("Global ")
@@ -54,13 +57,13 @@ func (tc *TestController) StoreCandidateInfo(ctx *gin.Context) {
 	}
 
 	fmt.Println("global handler ", candidateInformation)
-
-	err := tc.testService.StoreCandidateInfo(&candidateInformation)
-	if err != nil {
-		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
+	err2 := tc.testService.StoreCandidateInfo(&candidateInformation)
+	if err2 != nil {
+		ctx.JSON(http.StatusBadGateway, gin.H{"message": err2.Error()})
 		fmt.Println("Information return ")
 		return
 	}
+
 	ctx.JSON(http.StatusOK, gin.H{"message": "Success"})
 
 }

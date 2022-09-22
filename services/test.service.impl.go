@@ -74,7 +74,6 @@ func (t *TestServiceImpl) GetAllTest() ([]*models.Test, error) {
 	return tests, nil
 }
 
-// get test
 func (t *TestServiceImpl) GetTestID(TestID *int) (*models.ReturnedAnswer, error) {
 	var test *models.ReturnedAnswer
 	fmt.Println(*TestID)
@@ -108,12 +107,12 @@ func (t *TestServiceImpl) CreateTest(Test *mongo.Collection) error {
 	return err
 }
 func (t *TestServiceImpl) StoreCandidateInfo(candidateInformation *models.CandidateInformation) error {
-	// var ReturnedUserInformations models.ReturnedUserInformation
+
 	// var global models.Global
 	// newCandidateInformation := NewCandidateInterface{}
 	// vErrs, err := validation.Run(NewCandidateInterface)
 	fmt.Println("this is global ", candidateInformation)
-	// if err != nil {
+
 	// 	return err
 	// }
 	// if len(vErrs) > 0 {
@@ -121,35 +120,12 @@ func (t *TestServiceImpl) StoreCandidateInfo(candidateInformation *models.Candid
 
 	id := uuid.New()
 	candidateInformation.Global.TestID = int(id.ID())
-	// userInformation.Candidate.ID = int(id.ID())
-
-	// userInformation.Candidate.TimeStart = time.Now().Unix()
-	// ReturnInfo := []interface{}{
-	// 	bson.D{
-	// 		{Key: "global", Value: userInformation.TestID},
-	// 		{Key: "name", Value: global.Name},
-	// 		{Key: "company", Value: global.Company},
-	// 		{Key: "timeout", Value: global.Timeout},
-	// 		{Key: "randomize", Value: global.Randomize},
-	// 	},
-	// 	bson.D{
-	// 		{Key: "time_start", Value: ReturnedUserInformations.TimeStart.Day()},
-	// 		{Key: "firstname", Value: ReturnedUserInformations.FirstName},
-	// 		{Key: "lastname", Value: ReturnedUserInformations.LastName},
-	// 		{Key: "contact", Value: ReturnedUserInformations.Contact},
-	// 		{Key: "send_feedback", Value: ReturnedUserInformations.SendFeedback},
-	// 		{Key: "feedback", Value: ReturnedUserInformations.Feedback},
-	// 	},
-	// }
 
 	_, err := t.testCollection.InsertOne(t.ctx, candidateInformation)
 	if err != nil {
 		return err
 	}
-	// if ReturnInfo == nil && err == nil {
-	// 	return errors.New("no return info")
-	// }
-	// fmt.Println("Information return ")
+
 	return nil
 }
 

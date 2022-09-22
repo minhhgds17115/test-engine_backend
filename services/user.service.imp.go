@@ -29,8 +29,6 @@ func NewCandidateService(usercollection *mongo.Collection, ctx context.Context) 
 	}
 }
 
-
-
 func (u *CandidateServiceImpl) CreateCandidate(Candidate *models.Candidate) error {
 	fmt.Println("Candidate collection created", u.usercollection.Name(), u.usercollection.Database().Name())
 	// id := uuid.New()
@@ -109,14 +107,14 @@ func (u *CandidateServiceImpl) CandidateInformation(CandidateInformation *models
 }
 
 func (u *CandidateServiceImpl) GetCandidateTestID(TestID *int) (*models.CandidateInformation, error) {
-	var quiz *models.CandidateInformation
+	var testID *models.CandidateInformation
 	fmt.Println(*TestID)
 	query := bson.D{bson.E{Key: "test_id"}}
-	err := u.usercollection.FindOne(u.ctx, query).Decode(&quiz)
-	if query != nil || err != nil {
+	err := u.usercollection.FindOne(u.ctx, query).Decode(&testID)
+	if err != nil {
 		return nil, errors.New("could not find candidate information")
 	}
-	return quiz, err
+	return testID, err
 }
 
 func (u *CandidateServiceImpl) StoreTestCandidate(test *models.Test) error {

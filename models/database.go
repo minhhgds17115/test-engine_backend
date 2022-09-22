@@ -1,9 +1,5 @@
 package models
 
-import (
-	"github.com/go4all/validation/types"
-)
-
 // // TEST db
 type Test struct {
 	Global    Global      `json:"global"`
@@ -58,8 +54,8 @@ type ReturnedAnswer struct {
 
 type ReturnedCandidateInformation struct {
 	TimeStart    int64  `json:"time_start"`
-	FirstName    string `json:"firstname" validate:"required"`
-	LastName     string `json:"lastname" validate:"required" `
+	FirstName    string `json:"firstname" `
+	LastName     string `json:"lastname"  `
 	Contact      string `json:"contact"`
 	SendFeedback bool   `json:"send_feedback"`
 	Feedback     string `json:"feedback"`
@@ -108,59 +104,59 @@ type Answers struct {
 	Randomize bool   `json:"randomize"`
 }
 
-func (request Test) ValidationTest() (types.RuleMap, types.MessageMap) {
-	TestRules := types.RuleMap{
-		"test_id": {"required"},
-		"name":    {"required"},
-	}
-	TestMessages := types.MessageMap{
-		"name": {
-			"required": "Please enter your name",
-		},
-	}
-	return TestRules, TestMessages
-}
+// func (request Test) ValidationTest() (types.RuleMap, types.MessageMap) {
+// 	TestRules := types.RuleMap{
+// 		"test_id": {"required"},
+// 		"name":    {"required"},
+// 	}
+// 	TestMessages := types.MessageMap{
+// 		"name": {
+// 			"required": "Please enter your name",
+// 		},
+// 	}
+// 	return TestRules, TestMessages
+// }
 
-func (request CandidateInformation) CandidateInformationValidate() (types.RuleMap, types.MessageMap) {
-	CandidateRule := types.RuleMap{
-		"test_id": {"required"},
-		"name":    {"required"},
+// func (request CandidateInformation) CandidateInformationValidate() (types.RuleMap, types.MessageMap) {
+// 	CandidateRule := types.RuleMap{
+// 		"test_id": {"required"},
+// 		"name":    {"required"},
 
-		"firstname": {"required"},
-		"lastname":  {"required"},
-		"contact":   {"required", "email"},
-	}
-	CandidateMessages := types.MessageMap{
-		"name": {
-			"required": "Please enter your name",
-		},
-		"firstname": {"required": "Please enter your name"},
-		"lastname":  {"required": "Please enter your last name"},
-		"contact": {
-			"required": "Please enter your contact",
-			"email":    "Not valid email address"},
-	}
-	return CandidateRule, CandidateMessages
-}
+// 		"firstname": {"required"},
+// 		"lastname":  {"required"},
+// 		"contact":   {"required", "email"},
+// 	}
+// 	CandidateMessages := types.MessageMap{
+// 		"name": {
+// 			"required": "Please enter your name",
+// 		},
+// 		"firstname": {"required": "Please enter your name"},
+// 		"lastname":  {"required": "Please enter your last name"},
+// 		"contact": {
+// 			"required": "Please enter your contact",
+// 			"email":    "Not valid email address"},
+// 	}
+// 	return CandidateRule, CandidateMessages
+// }
 
-func (request ReturnedAnswer) ReturnedAnswerValidate() (types.RuleMap, types.MessageMap) {
-	ReturnedAnswerRule := types.RuleMap{
-		"test_id": {"required"},
-		"name":    {"required"},
+// func (request ReturnedAnswer) ReturnedAnswerValidate() (types.RuleMap, types.MessageMap) {
+// 	ReturnedAnswerRule := types.RuleMap{
+// 		"test_id": {"required"},
+// 		"name":    {"required"},
 
-		"firstname": {"required"},
-		"lastname":  {"required"},
-		"contact":   {"required", "email"},
-	}
-	ReturnedAnswerMessages := types.MessageMap{
-		"name": {
-			"required": "Please enter your name",
-		},
-		"firstname": {"required": "Please enter your name"},
-		"lastname":  {"required": "Please enter your last name"},
-		"contact": {
-			"required": "Please enter your contact",
-			"email":    "Not valid email address"},
-	}
-	return ReturnedAnswerRule, ReturnedAnswerMessages
-}
+// 		"firstname": {"required"},
+// 		"lastname":  {"required"},
+// 		"contact":   {"required", "email"},
+// 	}
+// 	ReturnedAnswerMessages := types.MessageMap{
+// 		"name": {
+// 			"required": "Please enter your name",
+// 		},
+// 		"firstname": {"required": "Please enter your name"},
+// 		"lastname":  {"required": "Please enter your last name"},
+// 		"contact": {
+// 			"required": "Please enter your contact",
+// 			"email":    "Not valid email address"},
+// 	}
+// 	return ReturnedAnswerRule, ReturnedAnswerMessages
+// }

@@ -91,7 +91,7 @@ func (uc *CandidateController) CandidateInformation(ctx *gin.Context) {
 }
 
 func (uc *CandidateController) GetCandidateTestID(ctx *gin.Context) {
-	testId, _ := strconv.Atoi(ctx.Param("test_id"))
+	testId, _ := strconv.Atoi(ctx.Param("id"))
 	CandidateInformation, err := uc.userService.GetCandidateTestID(&testId)
 	if CandidateInformation == nil {
 		ctx.JSON(http.StatusNotFound, gin.H{"message": err.Error()})
