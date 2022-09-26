@@ -8,9 +8,9 @@ type Test struct {
 }
 type Global struct {
 	TestID    int      `json:"test_id" `
-	Name      string   `json:"name"`
-	Company   string   `json:"company"`
-	Timeout   int      `json:"timeout"`
+	Name      string   `json:"name" validate:"required"`
+	Company   string   `json:"company" validate:"required"`
+	Timeout   int      `json:"timeout" `
 	Randomize bool     `json:"randomize"`
 	Callback  []string `json:"callback"`
 }
@@ -22,12 +22,12 @@ type Messages struct {
 }
 type Questions struct {
 	ID          int      `json:"id" `
-	Topic       string   `json:"topic"`
+	Topic       string   `json:"topic"  validate:"required"`
 	Timeout     int      `json:"timeout"`
-	Question    string   `json:"question"`
-	Information string   `json:"information"`
-	Multichoice bool     `json:"multichoice"`
-	Answers     []string `json:"answers"`
+	Question    string   `json:"question" validate:"required"`
+	Information string   `json:"information" validate:"required"`
+	Multichoice bool     `json:"multichoice" validate:"required"`
+	Answers     []string `json:"answers" validate:"required"`
 }
 
 // // Candidate's registed information
@@ -39,9 +39,9 @@ type CandidateInformation struct {
 type Candidate struct {
 	// ID        int    `json:"id" omniempty:"id"`
 	TimeStart int64  `json:"time_start"`
-	FirstName string `json:"firstname" omniempty:"firstname"`
-	LastName  string `json:"lastname" `
-	Contact   string `json:"contact" omniempty:"email"`
+	FirstName string `json:"firstname" omniempty:"firstname" validate:"required" `
+	LastName  string `json:"lastname" validate:"required" `
+	Contact   string `json:"contact" omniempty:"email" validate:"required"`
 }
 
 // // Returned answers
@@ -54,11 +54,11 @@ type ReturnedAnswer struct {
 
 type ReturnedCandidateInformation struct {
 	TimeStart    int64  `json:"time_start"`
-	FirstName    string `json:"firstname" `
-	LastName     string `json:"lastname"  `
-	Contact      string `json:"contact"`
-	SendFeedback bool   `json:"send_feedback"`
-	Feedback     string `json:"feedback"`
+	FirstName    string `json:"firstname" validate:"required"`
+	LastName     string `json:"lastname"  validate:"required"`
+	Contact      string `json:"contact" validate:"required"`
+	SendFeedback bool   `json:"send_feedback" validate:"required"`
+	Feedback     string `json:"feedback" validate:"required"`
 }
 
 type Stats struct {
@@ -69,26 +69,26 @@ type Stats struct {
 type ReturnedQuestion struct {
 	ID          int       `json:"id"`
 	Timeout     int       `json:"timeout"`
-	Question    string    `json:"question"`
-	Multichoice bool      `json:"multichoice"`
-	Topic       string    `json:"topic"`
-	Answers     []string  `json:"answers"`
-	Clicks      int       `json:"clicks"`
-	Histories   []History `json:"history"`
-	Results     []Result  `json:"results"`
-	Complete    bool      `json:"completed"`
+	Question    string    `json:"question" validate:"required"`
+	Multichoice bool      `json:"multichoice" validate:"required"`
+	Topic       string    `json:"topic" validate:"required"`
+	Answers     []string  `json:"answers" validate:"required"`
+	Clicks      int       `json:"clicks" validate:"required"`
+	Histories   []History `json:"history" validate:"required"`
+	Results     []Result  `json:"results" validate:"required"`
+	Complete    bool      `json:"completed" validate:"required"`
 }
 
 type History struct {
-	HistoryID int   `json:"id"`
-	Pos       int   `json:"pos"`
-	Timestamp int64 `json:"timestamp"`
+	HistoryID int   `json:"id" validate:"required"`
+	Pos       int   `json:"pos" validate:"required"`
+	Timestamp int64 `json:"timestamp" validate:"required"`
 }
 
 type Result struct {
-	Answer   string `json:"answer"`
-	Position int    `json:"position"`
-	Result   bool   `json:"result"`
+	Answer   string `json:"answer" validate:"required"`
+	Position int    `json:"position" validate:"required"`
+	Result   bool   `json:"result" `
 }
 
 type Answer struct {
@@ -104,59 +104,12 @@ type Answers struct {
 	Randomize bool   `json:"randomize"`
 }
 
-// func (request Test) ValidationTest() (types.RuleMap, types.MessageMap) {
-// 	TestRules := types.RuleMap{
-// 		"test_id": {"required"},
-// 		"name":    {"required"},
-// 	}
-// 	TestMessages := types.MessageMap{
-// 		"name": {
-// 			"required": "Please enter your name",
-// 		},
-// 	}
-// 	return TestRules, TestMessages
-// }
+// func main() {
+// 	validate := validator.New()
 
-// func (request CandidateInformation) CandidateInformationValidate() (types.RuleMap, types.MessageMap) {
-// 	CandidateRule := types.RuleMap{
-// 		"test_id": {"required"},
-// 		"name":    {"required"},
+// 	err := validate.StructCtx(ctx, Test)
+// 	if err != nil {
 
-// 		"firstname": {"required"},
-// 		"lastname":  {"required"},
-// 		"contact":   {"required", "email"},
 // 	}
-// 	CandidateMessages := types.MessageMap{
-// 		"name": {
-// 			"required": "Please enter your name",
-// 		},
-// 		"firstname": {"required": "Please enter your name"},
-// 		"lastname":  {"required": "Please enter your last name"},
-// 		"contact": {
-// 			"required": "Please enter your contact",
-// 			"email":    "Not valid email address"},
-// 	}
-// 	return CandidateRule, CandidateMessages
-// }
 
-// func (request ReturnedAnswer) ReturnedAnswerValidate() (types.RuleMap, types.MessageMap) {
-// 	ReturnedAnswerRule := types.RuleMap{
-// 		"test_id": {"required"},
-// 		"name":    {"required"},
-
-// 		"firstname": {"required"},
-// 		"lastname":  {"required"},
-// 		"contact":   {"required", "email"},
-// 	}
-// 	ReturnedAnswerMessages := types.MessageMap{
-// 		"name": {
-// 			"required": "Please enter your name",
-// 		},
-// 		"firstname": {"required": "Please enter your name"},
-// 		"lastname":  {"required": "Please enter your last name"},
-// 		"contact": {
-// 			"required": "Please enter your contact",
-// 			"email":    "Not valid email address"},
-// 	}
-// 	return ReturnedAnswerRule, ReturnedAnswerMessages
 // }

@@ -9,7 +9,10 @@ import (
 	"example.com/m/v2/services"
 
 	"github.com/gin-gonic/gin"
+	"github.com/go-playground/validator"
 )
+
+var validate *validator.Validate
 
 type TestController struct {
 	testService *services.TestServiceImpl
@@ -20,8 +23,6 @@ func NewTestController(testService *services.TestServiceImpl) *TestController {
 		testService: testService,
 	}
 }
-
-
 
 func (tc *TestController) GetAllTest(ctx *gin.Context) {
 	Test, err := tc.testService.GetAllTest()
@@ -55,11 +56,13 @@ func (tc *TestController) StoreCandidateInfo(ctx *gin.Context) {
 		fmt.Println("Global ")
 		return
 	}
+	validate := validator.New()
+	err := validate.Struct(candidateInformation)
 
 	fmt.Println("global handler ", candidateInformation)
-	err2 := tc.testService.StoreCandidateInfo(&candidateInformation)
-	if err2 != nil {
-		ctx.JSON(http.StatusBadGateway, gin.H{"message": err2.Error()})
+	// err := tc.testService.StoreCandidateInfo(&candidateInformation)
+	if err != nil {
+		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
 		fmt.Println("Information return ")
 		return
 	}
@@ -87,17 +90,9 @@ func (tc *TestController) ReturnAnswer(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{"message": "success"})
 }
 
-// func (tc *TestController) GetInfo(ctx *gin.Context) {
-// 	testId, _ := strconv.Atoi(ctx.Param("id"))
-// 	Candidate, err := tc.testService.GetTestID(&testId)
-// 	if err != nil {
-// 		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
-// 		return
-// 	}
-// 	ctx.JSON(http.StatusOK, Candidate)
-// }
-
+// Get Test by ID
 func (tc *TestController) GetTestID(ctx *gin.Context) {
+
 	testId, _ := strconv.Atoi(ctx.Param("id"))
 	Test, err := tc.testService.GetTestID(&testId)
 
@@ -106,6 +101,7 @@ func (tc *TestController) GetTestID(ctx *gin.Context) {
 		return
 	}
 	ctx.JSON(http.StatusOK, Test)
+
 }
 
 func (tc *TestController) RegisterTestRouterGroup(rg *gin.RouterGroup) {

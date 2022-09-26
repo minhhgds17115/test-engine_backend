@@ -2,6 +2,8 @@ package services
 
 import "example.com/m/v2/models"
 
+// Candidate services Interface
+
 type UserService interface {
 	CreateUser(models.Candidate) error
 	GetUserEmail(models.Candidate) (models.Candidate, error)

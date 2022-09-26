@@ -2,6 +2,8 @@ package services
 
 import "example.com/m/v2/models"
 
+// Question services Interface
+
 type QuestionsService interface {
 	CreateQuestions(models.Questions) error
 	GetQuestions(models.Questions) (models.Questions, error)

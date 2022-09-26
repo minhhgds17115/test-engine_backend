@@ -118,11 +118,7 @@ func (u *CandidateServiceImpl) GetCandidateTestID(TestID *int) (*models.Candidat
 }
 
 func (u *CandidateServiceImpl) StoreTestCandidate(test *models.Test) error {
-	// for _, TestID := range Global {
-	// 	if TestID != nil {
 
-	// 	}
-	// }
 	id := uuid.New()
 	test.Global.TestID = int(id.ID())
 

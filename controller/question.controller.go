@@ -19,6 +19,7 @@ func NewQuestionsController(QuestionsService *services.QuestionsServiceImpl) *Qu
 	}
 }
 
+// Get questions by ID
 func (qc *QuestionsController) GetQuestionsByID(ctx *gin.Context) {
 	var QuestionsID string = ctx.Param("QuestionsID")
 	user, err := qc.QuestionsService.GetQuestionsByID(QuestionsID)
@@ -29,6 +30,7 @@ func (qc *QuestionsController) GetQuestionsByID(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, user)
 }
 
+// Create New questions
 func (qc *QuestionsController) CreateQuestions(ctx *gin.Context) {
 	var Question models.Questions
 	if err := ctx.ShouldBindJSON(&Question); err != nil {
@@ -44,6 +46,7 @@ func (qc *QuestionsController) CreateQuestions(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{"message": "success"})
 }
 
+// update Question
 func (qc *QuestionsController) UpdateQuestions(ctx *gin.Context) {
 	var Question models.Questions
 	if err := ctx.ShouldBindJSON(&Question); err != nil {
@@ -57,6 +60,8 @@ func (qc *QuestionsController) UpdateQuestions(ctx *gin.Context) {
 	}
 	ctx.JSON(http.StatusOK, gin.H{"message": "success"})
 }
+
+// Delete Question
 func (qc *QuestionsController) DeleteQuestions(ctx *gin.Context) {
 	var QuestionsID string = ctx.Param("id")
 	err := qc.QuestionsService.DeleteQuestions(QuestionsID)
@@ -77,6 +82,7 @@ func (qc *QuestionsController) DeleteQuestions(ctx *gin.Context) {
 // 	ctx.JSON(http.StatusOK, Test)
 // }
 
+// RouterGroup
 func (qc *QuestionsController) RegisterQuestionsRouterGroup(rg *gin.RouterGroup) {
 	Questionsrouter := rg.Group("/Question")
 	// Questionsrouter.GET("",qc.GetAllQuestions)

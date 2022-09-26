@@ -23,6 +23,7 @@ func NewAnswerServices(answerColllection *mongo.Collection, ctx context.Context)
 	}
 }
 
+// CreateAnswer service
 func (u *AnswerServiceImpl) CreateAnswer(Answer *models.Answer) error {
 	id := uuid.New()
 	Answer.AnswerId = int(id.ID())
@@ -30,6 +31,7 @@ func (u *AnswerServiceImpl) CreateAnswer(Answer *models.Answer) error {
 	return err
 }
 
+// DeleteAnswer service
 func (u *AnswerServiceImpl) DeleteAnswer(Answer *models.Answer) error {
 	filter := bson.D{primitive.E{Key: "Answer", Value: Answer.Answer}}
 	result, _ := u.answerColllection.DeleteOne(u.ctx, filter)
@@ -39,6 +41,7 @@ func (u *AnswerServiceImpl) DeleteAnswer(Answer *models.Answer) error {
 	return nil
 }
 
+// UpdateAnswer service
 func (u *AnswerServiceImpl) UpdateAnswer(Answer *models.Answer) error {
 	filter := bson.D{primitive.E{Key: "answer", Value: Answer.Answer}}
 	result, _ := u.answerColllection.DeleteOne(u.ctx, filter)
@@ -49,6 +52,7 @@ func (u *AnswerServiceImpl) UpdateAnswer(Answer *models.Answer) error {
 
 }
 
+// GetAnswer service
 func (u *AnswerServiceImpl) GetAnswer(Answerid int) (*models.Answer, error) {
 	var answerid *models.Answer
 	query := bson.D{bson.E{Key: "id", Value: Answerid}}

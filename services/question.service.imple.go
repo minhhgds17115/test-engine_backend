@@ -12,11 +12,13 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
+// Question service implementation
 type QuestionsServiceImpl struct {
 	QuestionsCollection *mongo.Collection
 	ctx                 context.Context
 }
 
+// New QuestionsServiceImpl creates a new QuestionsService
 func NewQuestionsServices(QuestionsCollection *mongo.Collection, ctx context.Context) *QuestionsServiceImpl {
 	return &QuestionsServiceImpl{
 		QuestionsCollection: QuestionsCollection,
@@ -24,6 +26,7 @@ func NewQuestionsServices(QuestionsCollection *mongo.Collection, ctx context.Con
 	}
 }
 
+// Create a new Questions
 func (u *QuestionsServiceImpl) CreateQuestions(Question *models.Questions) error {
 	// id := uuid.New()
 	// Question.ID = int(id.ID())
@@ -33,6 +36,7 @@ func (u *QuestionsServiceImpl) CreateQuestions(Question *models.Questions) error
 	return err
 }
 
+// update Question
 func (u *QuestionsServiceImpl) UpdateQuestions(Question *models.Questions) error {
 	filter := bson.D{primitive.E{Key: "id", Value: Question.ID}}
 	update := bson.D{primitive.E{Key: "$set", Value: bson.D{primitive.E{Key: "ID", Value: Question.ID}, primitive.E{Key: "Information", Value: Question.Information}, primitive.E{Key: "Topic", Value: Question.Topic}, primitive.E{Key: "Timeouts", Value: Question.Timeout}}}}
@@ -43,6 +47,7 @@ func (u *QuestionsServiceImpl) UpdateQuestions(Question *models.Questions) error
 	return nil
 }
 
+// Delete Question
 func (u *QuestionsServiceImpl) DeleteQuestions(QuestionsId string) error {
 	id, _ := strconv.Atoi(QuestionsId)
 	filter := bson.D{primitive.E{Key: "id", Value: id}}
@@ -53,13 +58,10 @@ func (u *QuestionsServiceImpl) DeleteQuestions(QuestionsId string) error {
 	return nil
 }
 
+// Get Question by Id
 func (u *QuestionsServiceImpl) GetQuestionsByID(QuestionsId string) (*models.Questions, error) {
 	var QuestionsIDs *models.Questions
 	query := bson.D{bson.E{Key: "id", Value: QuestionsIDs}}
 	err := u.QuestionsCollection.FindOne(u.ctx, query).Decode(&QuestionsIDs)
 	return QuestionsIDs, err
 }
-
-// func (u *QuestionsServiceImpl) GetAllAnswerQuestions(Question *models.Question) {
-
-// }

@@ -2,6 +2,7 @@ package services
 
 import "example.com/m/v2/models"
 
+// Answer services Interface
 type AnswerService interface {
 	getAnswer(models.Answer) (*models.Answer, error)
 	createAnswer(models.Answer) (*models.Answer, error)
