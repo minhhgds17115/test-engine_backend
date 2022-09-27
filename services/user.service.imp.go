@@ -106,6 +106,7 @@ func (u *CandidateServiceImpl) CandidateInformation(CandidateInformation *models
 	return nil
 }
 
+// GetCandidate by ID
 func (u *CandidateServiceImpl) GetCandidateTestID(TestID *int) (*models.CandidateInformation, error) {
 	var testID *models.CandidateInformation
 	fmt.Println(*TestID)

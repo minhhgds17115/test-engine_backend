@@ -74,8 +74,8 @@ type ReturnedQuestion struct {
 	Topic       string    `json:"topic" validate:"required"`
 	Answers     []string  `json:"answers" validate:"required"`
 	Clicks      int       `json:"clicks" validate:"required"`
-	Histories   []History `json:"history" validate:"required"`
-	Results     []Result  `json:"results" validate:"required"`
+	Histories   []History `json:"history" `
+	Results     []Result  `json:"results" `
 	Complete    bool      `json:"completed" validate:"required"`
 }
 

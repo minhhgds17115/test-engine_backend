@@ -12,11 +12,13 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
+// test serviceImplementation
 type TestServiceImpl struct {
 	testCollection *mongo.Collection
 	ctx            context.Context
 }
 
+// new Test Service
 func NewTestService(testCollection *mongo.Collection, ctx context.Context) *TestServiceImpl {
 	return &TestServiceImpl{
 		testCollection: testCollection,
@@ -24,6 +26,7 @@ func NewTestService(testCollection *mongo.Collection, ctx context.Context) *Test
 	}
 }
 
+// Get all test services
 func (t *TestServiceImpl) GetAllTest() ([]*models.Test, error) {
 	var tests []*models.Test
 	cursor, err := t.testCollection.Find(t.ctx, bson.D{{}})
@@ -74,6 +77,7 @@ func (t *TestServiceImpl) GetAllTest() ([]*models.Test, error) {
 	return tests, nil
 }
 
+// Get test by id
 func (t *TestServiceImpl) GetTestID(TestID *int) (*models.ReturnedAnswer, error) {
 	var test *models.ReturnedAnswer
 	fmt.Println(*TestID)
@@ -83,6 +87,7 @@ func (t *TestServiceImpl) GetTestID(TestID *int) (*models.ReturnedAnswer, error)
 	return test, err
 }
 
+// Update test
 func (t *TestServiceImpl) UpdateTest(Test *models.Test) error {
 	filter := bson.D{primitive.E{Key: "id", Value: Test.Global.TestID}}
 	multichoice := make([]bool, 0)
@@ -101,11 +106,14 @@ func (t *TestServiceImpl) UpdateTest(Test *models.Test) error {
 	return nil
 }
 
+// Create a new Test
 func (t *TestServiceImpl) CreateTest(Test *mongo.Collection) error {
 
 	_, err := t.testCollection.InsertOne(t.ctx, Test)
 	return err
 }
+
+// Store Candidate
 func (t *TestServiceImpl) StoreCandidateInfo(candidateInformation *models.CandidateInformation) error {
 
 	// var global models.Global
@@ -129,30 +137,13 @@ func (t *TestServiceImpl) StoreCandidateInfo(candidateInformation *models.Candid
 	return nil
 }
 
+// Returned Answer
 func (t *TestServiceImpl) ReturnAnswer(returnAnswer *models.ReturnedAnswer) error {
 
 	// uuid validation
 	id := uuid.New()
 	returnAnswer.Global.TestID = int(id.ID())
 
-	// returnAnswer.Questions[0].Question.ID = int(id.ID())
-	// returnAnswer.Questions.Answer.AnswerId = int(id.ID())
-	// returnAnswer.Questions.Question.Answers.AnswerId = int(id.ID())
-	// returnAnswer.Questions.Histories.HistoryID = int(id.ID())
-
-	// time
-	// returnAnswer.Stats.TimeStart = time.Now().Unix()
-	// returnAnswer.Stats.TimeEnd = time.Now().Unix()
-	// returnAnswer.Questions.Histories.Timestamp = time.Now().Unix()
-	// returnAnswer.ReturnedUserInformation.TimeStart = time.Now().Unix()
-
-	// clicks
-	// returnAnswer.Questions.Clicks =
-
-	// Answers
-	// returnAnswer.Questions.Answers =
-
-	//Results
 	// returnAnswer.Questions.Question = []models.Questions.Question.
 
 	_, err := t.testCollection.InsertOne(t.ctx, returnAnswer)

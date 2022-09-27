@@ -27,6 +27,7 @@ func (qc *QuestionsController) GetQuestionsByID(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
 		return
 	}
+
 	ctx.JSON(http.StatusOK, user)
 }
 

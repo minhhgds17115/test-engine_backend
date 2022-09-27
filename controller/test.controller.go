@@ -12,16 +12,20 @@ import (
 	"github.com/go-playground/validator"
 )
 
-var validate *validator.Validate
-
 type TestController struct {
 	testService *services.TestServiceImpl
 }
+
+var Validate *validator.Validate
 
 func NewTestController(testService *services.TestServiceImpl) *TestController {
 	return &TestController{
 		testService: testService,
 	}
+}
+
+func init() {
+	Validate = validator.New()
 }
 
 func (tc *TestController) GetAllTest(ctx *gin.Context) {
@@ -56,15 +60,20 @@ func (tc *TestController) StoreCandidateInfo(ctx *gin.Context) {
 		fmt.Println("Global ")
 		return
 	}
-	validate := validator.New()
-	err := validate.Struct(candidateInformation)
 
 	fmt.Println("global handler ", candidateInformation)
-	// err := tc.testService.StoreCandidateInfo(&candidateInformation)
+	err := tc.testService.StoreCandidateInfo(&candidateInformation)
 	if err != nil {
+
 		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
 		fmt.Println("Information return ")
 		return
+	}
+
+	if err := Validate.Struct(candidateInformation); err != nil {
+		if _, ok := err.(*validator.ValidationErrors); ok {
+			return
+		}
 	}
 
 	ctx.JSON(http.StatusOK, gin.H{"message": "Success"})
@@ -87,6 +96,11 @@ func (tc *TestController) ReturnAnswer(ctx *gin.Context) {
 		return
 	}
 
+	if err := Validate.Struct(&returnedAnswer); err != nil {
+		ctx.JSON(http.StatusExpectationFailed, gin.H{"message": err.Error()})
+		return
+	}
+
 	ctx.JSON(http.StatusOK, gin.H{"message": "success"})
 }
 
@@ -94,13 +108,25 @@ func (tc *TestController) ReturnAnswer(ctx *gin.Context) {
 func (tc *TestController) GetTestID(ctx *gin.Context) {
 
 	testId, _ := strconv.Atoi(ctx.Param("id"))
-	Test, err := tc.testService.GetTestID(&testId)
+	ReturnedAnswer, err := tc.testService.GetTestID(&testId)
+	fmt.Println("Begin validation")
+	if ReturnedAnswer == nil {
+		ctx.JSON(http.StatusNotFound, gin.H{"message": err.Error()})
+		return
+	}
 
 	if err != nil {
 		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
 		return
 	}
-	ctx.JSON(http.StatusOK, Test)
+
+	if err := Validate.Struct(ReturnedAnswer); err != nil {
+		if _, ok := err.(*validator.ValidationErrors); ok {
+			return
+		}
+	}
+
+	ctx.JSON(http.StatusOK, ReturnedAnswer)
 
 }
 

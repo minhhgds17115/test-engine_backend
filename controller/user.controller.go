@@ -102,13 +102,16 @@ func (uc *CandidateController) CandidateInformation(ctx *gin.Context) {
 func (uc *CandidateController) GetCandidateTestID(ctx *gin.Context) {
 	testId, _ := strconv.Atoi(ctx.Param("id"))
 	CandidateInformation, err := uc.userService.GetCandidateTestID(&testId)
+
 	if CandidateInformation == nil {
 		ctx.JSON(http.StatusNotFound, gin.H{"message": err.Error()})
+		return
 	}
 	if err != nil {
 		ctx.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
 		return
 	}
+
 	ctx.JSON(http.StatusOK, CandidateInformation)
 
 }
@@ -125,6 +128,11 @@ func (uc *CandidateController) StoreTestCandidate(ctx *gin.Context) {
 	err := uc.userService.StoreTestCandidate(&testInfo)
 	if err != nil {
 		ctx.JSON(http.StatusOK, gin.H{"message": err.Error()})
+		return
+	}
+
+	if err := Validate.Struct(testInfo); err != nil {
+		ctx.JSON(http.StatusExpectationFailed, gin.H{"message": err.Error()})
 		return
 	}
 
